@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mascotalia - Inicio{% endblock %}
+
+{% block body %}
+
+    {# HERO SECTION #}
+    <section class="hero-section">
+        <img src="https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?q=80&w=2788&auto=format&fit=crop" alt="Perro y humano" class="hero-image">
+        <h1 class="hero-text">ADOPTÁ TU NUEVO MEJOR AMIGO</h1>
+    </section>
+
+    {# CATEGORÍAS #}
+    <div class="container mt-5 mb-5">
+        <div class="row text-center">
+            
+            <div class="col-3 category-card">
+                <img src="https://images.unsplash.com/photo-1591160690555-5debfba289f0?w=500&auto=format&fit=crop&q=60" alt="Cachorro" class="category-img">
+                <h3 class="category-title">Cachorro</h3>
+                <p class="category-subtitle">Menos de 1 año</p>
+            </div>
+
+            <div class="col-3 category-card">
+                <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=500&auto=format&fit=crop&q=60" alt="Joven" class="category-img">
+                <h3 class="category-title">Joven</h3>
+                <p class="category-subtitle">1-5 años</p>
+            </div>
+
+            <div class="col-3 category-card">
+                <img src="https://images.unsplash.com/photo-1544175252-0764f697669d?w=500&auto=format&fit=crop&q=60" alt="Adulto" class="category-img">
+                <h3 class="category-title">Adulto</h3>
+                <p class="category-subtitle">5-9 años</p>
+            </div>
+
+            <div class="col-3 category-card">
+                <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=500&auto=format&fit=crop&q=60" alt="Abuelo" class="category-img">
+                <h3 class="category-title">Abuelo</h3>
+                <p class="category-subtitle">+ de 10 años</p>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

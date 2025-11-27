@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ver Mascotas - Mascotalia{% endblock %}
+
+{% block body %}
+
+    {# --- FONDO MARRÓN (Contenedor externo) --- #}
+    <div style="background-color: #846355; min-height: 85vh; padding: 40px 0;">
+        <div class="container">
+            
+            {# --- GRAN TARJETA BLANCA CENTRAL --- #}
+            <div class="bg-white shadow-lg" style="border-radius: 12px; padding: 40px; min-height: 80vh;">
+                
+                {# Título #}
+                <h2 class="text-center mb-4" style="color: #000; font-weight: bold; font-size: 1.8rem;">Encontrá tu compañero</h2>
+
+                {# Barra de Herramientas (Filtros y Ordenar) #}
+                <div class="d-flex justify-content-center gap-3 mb-5">
+                    
+                    {# Botón Filtros #}
+                    <button class="btn text-white px-4" style="background-color: #0F5D3C; border-radius: 5px; font-weight: 500;">
+                        Filtros
+                    </button>
+
+                    {# Dropdown Ordenar #}
+                    <select class="form-select w-auto" style="border-radius: 5px; border-color: #ccc; min-width: 200px;">
+                        <option selected>Ordenar por...</option>
+                        <option value="1">Más recientes</option>
+                        <option value="2">Mayor edad</option>
+                        <option value="3">Menor edad</option>
+                    </select>
+                </div>
+
+                {# --- GRILLA DE MASCOTAS --- #}
+                <div class="row g-4">
+                    
+                    {# Bucle simulado para mostrar 12 tarjetas como en la imagen #}
+                    {% for i in 1..12 %}
+                        <div class="col-md-6 col-lg-3">
+                            
+                            {# TARJETA DE MASCOTA INDIVIDUAL #}
+                            <div class="card h-100 border shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                                
+                                {# Imagen (Simulada con placeholder de perro) #}
+                                <div style="height: 200px; overflow: hidden; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                                    {# Usamos una imagen cuadrada de ejemplo #}
+                                    <img src="https://images.unsplash.com/photo-1591160690555-5debfba289f0?w=500&auto=format&fit=crop&q=60" 
+                                         alt="Perro" 
+                                         style="width: 100%; height: 100%; object-fit: cover; padding: 15px; border-radius: 25px;">
+                                </div>
+
+                                <div class="card-body text-center p-3">
+                                    {# Nombre #}
+                                    <h5 class="card-title mb-1" style="font-weight: bold; font-size: 1.1rem;">Nombre</h5>
+                                    
+                                    {# Especie - Edad #}
+                                    <p class="card-text text-muted mb-3" style="font-size: 0.9rem;">Especie - Edad</p>
+                                    
+                                    {# Botón Ver Detalles #}
+                                    <a href="#" class="btn text-white btn-sm px-4" style="background-color: #0F5D3C; border-radius: 5px; font-size: 0.85rem;">
+                                        Ver Detalles
+                                    </a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    {% endfor %}
+
+                </div>
+                {# Fin de la fila #}
+
+            </div>
+            {# Fin de tarjeta blanca #}
+
+        </div>
+    </div>
+
+{% endblock %}

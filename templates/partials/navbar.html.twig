@@ -1,0 +1,72 @@
+{# templates/partials/_navbar.html.twig #}
+
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        
+        {# --- 1. LOGO (Común para todos) --- #}
+        <a class="brand-text" href="{{ path('app_home') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16" style="color: var(--color-naranja);">
+                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+            </svg>
+            &nbsp;Mascotalia
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            
+            {# --- 2. ENLACES CENTRALES (Cambian según quién eres) --- #}
+            <ul class="navbar-nav mx-auto">
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                    {# --- MENÚ DE ADMIN --- #}
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Gestionar Mascotas</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Gestionar Solicitudes</a></li>
+
+                {% elseif app.user %}
+                    {# --- MENÚ DE CLIENTE LOGUEADO --- #}
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ver Mascotas</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Mis Solicitudes</a></li>
+
+                {% else %}
+                    {# --- MENÚ DE VISITANTE (DESLOGUEADO) --- #}
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ver Mascotas</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Mis Solicitudes</a></li>
+                {% endif %}
+
+            </ul>
+
+            {# --- 3. BOTONES DERECHA (Login/Registro vs Perfil/Salir) --- #}
+            <div class="d-flex gap-2 align-items-center">
+                
+                {% if app.user %}
+                    {# ESTADO: LOGUEADO (Sea Admin o Cliente) #}
+
+                    {# Dropdown o Botones de Usuario #}
+                    <div class="dropdown">
+                        <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Mi Cuenta
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            {# El path 'app_logout' lo crearemos luego con security #}
+                            <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+
+                {% else %}
+                    {# ESTADO: DESLOGUEADO #}
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-custom">Login</a>
+                    <a href="{{ path('app_register') }}" class="btn btn-filled-custom">Registrarse</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</nav>

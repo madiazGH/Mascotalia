@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crear Cuenta - Mascotalia{% endblock %}
+
+{% block body %}
+
+    {# --- FONDO MARRÓN (Ocupa todo el ancho) --- #}
+    {# Usamos min-height para asegurar que cubra la pantalla aunque haya poco contenido #}
+    <div style="background-color: #846355; min-height: 85vh; padding: 60px 0; display: flex; align-items: center;">
+        
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-xl-9">
+                    
+                    {# --- TARJETA BLANCA --- #}
+                    <div class="card border-0 shadow-lg" style="border-radius: 12px; padding: 2rem;">
+                        <div class="card-body">
+                            
+                            {# Título y Link a Login #}
+                            <h2 class="mb-1" style="color: #000; font-weight: bold; font-size: 1.8rem;">Bienvenido a Mascotalia</h2>
+                            <p class="mb-4" style="color: #666; font-size: 0.95rem;">
+                                ¿Ya tenés cuenta? 
+                                <a href="{{ path('app_login') }}" style="color: var(--color-naranja); text-decoration: none; font-weight: bold;">Iniciá sesión</a>
+                            </p>
+
+                            {# INICIO DEL FORMULARIO #}
+                            <form action="#" method="post">
+                                
+                                {# Fila 1: Nombre y Apellido #}
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Nombre</label>
+                                        <input type="text" class="form-control" name="nombre" placeholder="Nombre" style="padding: 10px;">
+                                    </div>
+                                    <div class="col-md-6 mt-3 mt-md-0">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Apellido</label>
+                                        <input type="text" class="form-control" name="apellido" placeholder="Apellido" style="padding: 10px;">
+                                    </div>
+                                </div>
+
+                                {# Fila 2: DNI y Fecha Nacimiento #}
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">DNI</label>
+                                        <input type="text" class="form-control" name="dni" placeholder="44.444.444" style="padding: 10px;">
+                                    </div>
+                                    <div class="col-md-6 mt-3 mt-md-0">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Fecha de Nacimiento</label>
+                                        {# Usamos type="text" para que se vea el placeholder 33/33/3333 igual a la imagen #}
+                                        <input type="text" class="form-control" name="fechaNacimiento" placeholder="33 / 33 / 3333" style="padding: 10px;">
+                                    </div>
+                                </div>
+
+                                {# Fila 3: Provincia y Ciudad #}
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Provincia</label>
+                                        <input type="text" class="form-control" name="provincia" placeholder="Provincia" style="padding: 10px;">
+                                    </div>
+                                    <div class="col-md-6 mt-3 mt-md-0">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Ciudad</label>
+                                        <input type="text" class="form-control" name="ciudad" placeholder="Ciudad" style="padding: 10px;">
+                                    </div>
+                                </div>
+
+                                {# Fila 4: Direccion y Telefono #}
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Direccion</label>
+                                        <input type="text" class="form-control" name="direccion" placeholder="Direccion, 1234" style="padding: 10px;">
+                                    </div>
+                                    <div class="col-md-6 mt-3 mt-md-0">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Numero de Teléfono</label>
+                                        <input type="text" class="form-control" name="telefono" placeholder="+54 000 0000" style="padding: 10px;">
+                                    </div>
+                                </div>
+
+                                {# Fila 5: Correo (Ancho completo) #}
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-size: 0.85rem; color: #888;">Correo Electrónico</label>
+                                    <input type="email" class="form-control" name="email" placeholder="ejemplo@correo.com" style="padding: 10px;">
+                                </div>
+
+                                {# Fila 6: Contraseñas con ícono de ojo #}
+                                <div class="row mb-4">
+                                    {# Contraseña 1 #}
+                                    <div class="col-md-6">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Contraseña</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" name="password" placeholder="Ingresa tu contraseña" style="padding: 10px; border-right: 0;">
+                                            <span class="input-group-text bg-white border-start-0">
+                                                {# Icono Ojo Tachado SVG #}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-eye-slash" viewBox="0 0 16 16">
+                                                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                                                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                                                    <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    {# Contraseña 2 #}
+                                    <div class="col-md-6 mt-3 mt-md-0">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Repetir Contraseña</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" name="password_repeat" placeholder="Ingresa tu contraseña" style="padding: 10px; border-right: 0;">
+                                            <span class="input-group-text bg-white border-start-0">
+                                                {# Icono Ojo Tachado SVG #}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-eye-slash" viewBox="0 0 16 16">
+                                                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                                                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                                                    <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# BOTÓN CREAR CUENTA #}
+                                <div class="text-center mt-5">
+                                    <button type="submit" class="btn text-white px-5 py-2" style="background-color: #0F5D3C; font-weight: 500; border-radius: 5px; width: 250px;">
+                                        Crear Cuenta
+                                    </button>
+                                </div>
+
+                            </form>
+                            {# FIN DEL FORMULARIO #}
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle de Mascota - Mascotalia{% endblock %}
+
+{% block body %}
+
+    {# --- FONDO MARRÓN (Mismo estilo que Login/Registro) --- #}
+    <div style="background-color: #846355; min-height: 85vh; padding: 60px 0; display: flex; align-items: center;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    
+                    {# --- TARJETA BLANCA --- #}
+                    <div class="card border-0 shadow-lg" style="border-radius: 12px; padding: 3rem;">
+                        <div class="card-body p-0">
+                            
+                            <div class="row align-items-center">
+                                
+                                {# COLUMNA IZQUIERDA: FOTO #}
+                                <div class="col-md-5 mb-4 mb-md-0">
+                                    <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                        <img src="{{ mascota.imagen }}" 
+                                             alt="{{ mascota.nombre }}" 
+                                             style="width: 100%; height: auto; object-fit: cover; aspect-ratio: 1/1;">
+                                    </div>
+                                </div>
+
+                                {# COLUMNA DERECHA: DATOS #}
+                                <div class="col-md-7 ps-md-5">
+                                    
+                                    {# Nombre #}
+                                    <h2 class="mb-3" style="color: #000; font-weight: bold; font-size: 2rem;">{{ mascota.nombre }}</h2>
+                                    
+                                    {# Lista de Datos #}
+                                    <ul class="list-unstyled mb-4" style="color: #666; font-size: 1rem; line-height: 1.6;">
+                                        <li><strong>Especie:</strong> {{ mascota.especie }}</li>
+                                        <li><strong>Edad:</strong> {{ mascota.edad }}</li>
+                                        <li><strong>Tamaño:</strong> {{ mascota.tamano }}</li>
+                                    </ul>
+
+                                    {# Caja de Descripción #}
+                                    <div class="p-3 mb-5" style="border: 1px solid #ddd; border-radius: 10px;">
+                                        <h6 class="mb-2" style="font-weight: bold; color: #000;">Sobre este compañero...</h6>
+                                        <p class="mb-0" style="color: #555; font-size: 0.95rem;">
+                                            {{ mascota.descripcion }}
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {# BOTÓN SOLICITAR ADOPCIÓN (Centrado Abajo) #}
+                            <div class="row mt-4">
+                                <div class="col-12 text-center">
+                                    {# Nota: Todavía no tenemos la ruta de "solicitar", ponemos # por ahora #}
+                                    <a href="#" class="btn text-white px-5 py-2" style="background-color: #0F5D3C; font-weight: 500; border-radius: 5px; width: 300px; font-size: 1.1rem;">
+                                        Solicitar Adopción
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    {# Fin Tarjeta #}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

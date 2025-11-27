@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mis Solicitudes - Mascotalia{% endblock %}
+
+{% block body %}
+
+    {# --- FONDO MARRÓN EXTERNO --- #}
+    <div style="background-color: #846355; min-height: 85vh; padding: 40px 0;">
+        <div class="container">
+            
+            {# --- CONTENEDOR BLANCO CENTRAL --- #}
+            <div class="bg-white shadow-lg" style="border-radius: 0px; padding: 40px; min-height: 80vh;">
+                {# Nota: En tu imagen el contenedor blanco parece llegar hasta los bordes laterales del container marrón o tener borde recto #}
+                
+                {# Título #}
+                <h2 class="text-center mb-5" style="color: #000; font-weight: bold; font-size: 1.6rem;">Revisá tus solicitudes...</h2>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        
+                        {# Bucle de Solicitudes #}
+                        {% for solicitud in solicitudes %}
+                            
+                            {# TARJETA HORIZONTAL #}
+                            <div class="card mb-4 shadow-sm" style="border-radius: 15px; border: 2px solid #e0e0e0; overflow: hidden;">
+                                <div class="row g-0 align-items-center">
+                                    
+                                    {# Columna Foto (Izquierda) #}
+                                    <div class="col-md-4 p-3">
+                                        <div style="aspect-ratio: 1/1; overflow: hidden; border-radius: 12px;">
+                                            <img src="{{ solicitud.imagen }}" 
+                                                 class="img-fluid rounded-start" 
+                                                 alt="{{ solicitud.mascota }}" 
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                    </div>
+                                    
+                                    {# Columna Datos (Derecha) #}
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            
+                                            {# Nombre Mascota #}
+                                            <h3 class="card-title mb-2" style="font-weight: bold; font-size: 1.8rem; color: #000;">{{ solicitud.mascota }}</h3>
+                                            
+                                            {# Fecha #}
+                                            <p class="card-text mb-2" style="font-size: 0.85rem; color: #333;">
+                                                Fecha de envio de solicitud - {{ solicitud.fecha }}
+                                            </p>
+                                            
+                                            {# Estado (Label) #}
+                                            <p class="card-text mb-3" style="font-weight: bold; font-size: 1rem; color: #000;">
+                                                {{ solicitud.estado }}
+                                            </p>
+                                            
+                                            {# Botón Cancelar (Color Beige/Grisáceo) #}
+                                            <button class="btn btn-sm px-3" style="background-color: #C6B6A8; color: #333; font-weight: 500; border-radius: 5px; border: none;">
+                                                Cancelar
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {# Fin Tarjeta #}
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+            </div>
+            {# Fin Contenedor Blanco #}
+
+        </div>
+    </div>
+
+{% endblock %}
