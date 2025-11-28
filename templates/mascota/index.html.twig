@@ -64,7 +64,7 @@
                                     
                                     {# LINK AL DETALLE #}
                                     {# Nota: Más adelante le pasaremos el ID, por ahora va al detalle genérico #}
-                                    <a href="{{ path('app_mascota_detalle') }}" class="btn text-white btn-sm px-4" style="background-color: #0F5D3C; border-radius: 5px; font-size: 0.85rem;">
+                                    <a href="{{ path('app_mascota_detalle', {'id': mascota.id}) }}" class="btn text-white btn-sm px-4" style="background-color: #0F5D3C; border-radius: 5px; font-size: 0.85rem;">
                                         Ver Detalles
                                     </a>
                                 </div>

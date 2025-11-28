@@ -2,35 +2,36 @@
 
 namespace App\Controller;
 
-use App\Repository\MascotaRepository; // Importante: Importar esto
+use App\Entity\Mascota; // <--- IMPORTANTE: Asegúrate de tener esta línea arriba
+use App\Repository\MascotaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class MascotaController extends AbstractController
 {
-    // Listado de mascotas
     #[Route('/mascotas', name: 'app_mascotas')]
     public function index(MascotaRepository $mascotaRepository): Response
     {
-        // 1. Usamos el repositorio para buscar en la BD.
-        // El método findBy nos permite filtrar.
-        // Buscamos solo las que tengan disponible = true (1 en la BD)
+        // Esto ya lo tenías bien, trae todas las disponibles
         $mascotas = $mascotaRepository->findBy(['disponible' => true]);
 
         return $this->render('mascota/index.html.twig', [
-            // 2. Pasamos la variable 'mascotas' a la vista
             'mascotas' => $mascotas,
         ]);
     }
 
-    // Detalle de una mascota (Ya lo tenías, lo dejamos preparado para después)
-    #[Route('/mascota/detalle', name: 'app_mascota_detalle')]
-    public function detalle(): Response
+    // CAMBIO IMPORTANTE AQUÍ:
+    // 1. Agregamos {id} a la ruta.
+    // 2. Inyectamos la entidad Mascota directamente.
+    #[Route('/mascota/detalle/{id}', name: 'app_mascota_detalle')]
+    public function detalle(Mascota $mascota): Response
     {
-        // ... por ahora sigue con datos falsos, luego lo conectamos ...
+        // Ya no creamos el array falso $mascota = [...]
+        // Symfony ya buscó en la BD al perro con ese ID y lo guardó en la variable $mascota
+        
         return $this->render('mascota/detalle.html.twig', [
-             // ...
+            'mascota' => $mascota,
         ]);
     }
 }

@@ -28,13 +28,13 @@
                     {# --- MENÚ DE CLIENTE LOGUEADO --- #}
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_mascotas') }}">Ver Mascotas</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Mis Solicitudes</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_mis_solicitudes') }}">Mis Solicitudes</a></li>
 
                 {% else %}
                     {# --- MENÚ DE VISITANTE (DESLOGUEADO) --- #}
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_mascotas') }}">Ver Mascotas</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Mis Solicitudes</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_login') }}">Mis Solicitudes</a></li>
                 {% endif %}
 
             </ul>
