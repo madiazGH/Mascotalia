@@ -10,6 +10,7 @@
     --color-boton-select: #0F5D3C;
     --color-texto-base: #522E1E;
     --color-texto-secundario: #846355;
+    --color-texto-oscuro: #250D03;
 }
 
 body {
@@ -20,9 +21,14 @@ body {
 
 /* --- NAVBAR --- */
 .navbar-custom {
-    background-color: var(--color-fondo-blanco);
+    background-color: var(--color-fondo-basico);
     border-bottom: 1px solid #e0e0e0;
     padding: 15px 0;
+}
+
+.logo_mascotalia {
+    width: 50px;
+    height: 50px;
 }
 
 .brand-text {
@@ -55,11 +61,6 @@ body {
     text-decoration: none; /* Importante para que no parezca link */
 }
 
-.btn-outline-custom:hover {
-    background-color: var(--color-fondo-basico);
-    color: var(--color-boton-select);
-}
-
 .btn-filled-custom {
     background-color: var(--color-boton-select);
     color: white;
@@ -70,7 +71,7 @@ body {
     text-decoration: none;
 }
 
-.btn-filled-custom:hover {
+.btn-filled-custom:hover, .btn-outline-custom:hover {
     background-color: var(--color-boton);
     border-color: var(--color-boton);
     color: white;
@@ -92,24 +93,23 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.9;
+    opacity: 0.4;
 }
 
 .hero-text {
     position: absolute;
-    color: var(--color-texto-base);
-    font-size: 3rem;
+    color: var(--color-texto-oscuro);
+    font-size: 5rem;
     font-weight: 900;
     text-transform: uppercase;
     text-align: center;
     letter-spacing: 2px;
-    text-shadow: 0px 0px 20px rgba(255,255,255,0.8);
 }
 
 /* --- CATEGORÍAS --- */
 .category-img {
-    width: 180px;
-    height: 180px;
+    width: 280px;
+    height: 280px;
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 15px;
@@ -126,18 +126,18 @@ body {
 .category-title {
     color: black;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     margin-bottom: 0;
 }
 
 .category-subtitle {
     color: var(--color-texto-base);
-    font-size: 0.9rem;
+    font-size: 1.2rem;
 }
 
 /* --- FOOTER --- */
 .footer-custom {
-    background-color: var(--color-fondo-blanco);
+    background-color: var(--color-fondo-basico);
     border-top: 1px solid #e0e0e0;
     padding: 20px 0;
     margin-top: 50px;
