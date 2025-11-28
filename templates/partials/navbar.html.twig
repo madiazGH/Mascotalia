@@ -1,10 +1,10 @@
-{# templates/partials/_navbar.html.twig #}
+{# templates/partials/navbar.html.twig #}
 
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
         
         {# --- 1. LOGO (Común para todos) --- #}
-        <a class="brand-text" href="{{ path('app_home') }}">
+        <a class="brand-text" href="{{ path('app_inicio') }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16" style="color: var(--color-naranja);">
                 <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
             </svg>
@@ -22,19 +22,19 @@
                 
                 {% if is_granted('ROLE_ADMIN') %}
                     {# --- MENÚ DE ADMIN --- #}
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Gestionar Mascotas</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Gestionar Solicitudes</a></li>
 
                 {% elseif app.user %}
                     {# --- MENÚ DE CLIENTE LOGUEADO --- #}
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ver Mascotas</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Mis Solicitudes</a></li>
 
                 {% else %}
                     {# --- MENÚ DE VISITANTE (DESLOGUEADO) --- #}
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Ver Mascotas</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Mis Solicitudes</a></li>
                 {% endif %}
