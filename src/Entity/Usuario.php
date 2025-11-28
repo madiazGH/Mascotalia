@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
-class Usuario
+class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -202,6 +204,38 @@ class Usuario
         $this->rol = $rol;
 
         return $this;
+    }
+
+    // Este método es OBLIGATORIO para el login
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    // Este método es OBLIGATORIO para verificar la clave
+    public function getPassword(): ?string
+    {
+        return $this->contraseña;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        // Nota: Si $this->rol es un string único en tu BD, envuélvelo en corchetes: [$this->rol]
+        $roles = $this->rol; 
+
+        // 2. IMPORTANTE: Garantizar que TODO usuario tenga al menos ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Si guardaras datos sensibles temporales, los borrarías acá.
+        // Por lo general se deja vacío.
     }
 
     /**

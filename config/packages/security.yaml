@@ -1,39 +1,47 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    # 1. ENCRIPTACIÓN: Definimos que las contraseñas se hashean
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+
+    # 2. PROVEEDOR: Le decimos a Symfony que busque usuarios en la Entidad "Usuario" usando el campo "email"
     providers:
-        users_in_memory: { memory: null }
+        app_user_provider:
+            entity:
+                class: App\Entity\Usuario
+                property: email
+
+    # 3. FIREWALLS: Las reglas del juego
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
+            # Configuración del Formulario de Login
+            form_login:
+                # Nombre de la ruta del login (que definimos en LoginController)
+                login_path: app_login
+                check_path: app_login
+                # Redirigir al home después de loguearse con éxito
+                default_target_path: app_inicio 
+                # Permitir que el login funcione
+                enable_csrf: true
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # Configuración del Logout
+            logout:
+                path: app_logout
+                # A dónde ir después de salir
+                target: app_inicio
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
+    # 4. CONTROL DE ACCESO: Aquí definimos tus reglas de negocio
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # A. Solo el ADMIN puede entrar a rutas que empiecen con /admin (gestionar mascotas, etc)
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
-when@test:
-    security:
-        password_hashers:
-            # By default, password hashers are resource intensive and take time. This is
-            # important to generate secure password hashes. In tests however, secure hashes
-            # are not important, waste resources and increase test times. The following
-            # reduces the work factor to the lowest possible values.
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon
+        # B. TU REGLA DE ORO:
+        # Cualquier ruta que empiece con /mis-solicitudes requiere estar logueado (ROLE_USER).
+        # Si un anónimo entra, Symfony lo manda al Login automáticamente.
+        - { path: ^/mis-solicitudes, roles: ROLE_USER }
