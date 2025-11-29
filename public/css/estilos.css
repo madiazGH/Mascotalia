@@ -58,7 +58,7 @@ body {
     font-weight: bold;
     padding: 5px 20px;
     border-radius: 8px;
-    text-decoration: none; /* Importante para que no parezca link */
+    text-decoration: none;
 }
 
 .btn-filled-custom {

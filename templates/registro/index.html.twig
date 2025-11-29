@@ -20,7 +20,7 @@
                             <h2 class="mb-1" style="color: #000; font-weight: bold; font-size: 1.8rem;">Bienvenido a Mascotalia</h2>
                             <p class="mb-4" style="color: #666; font-size: 0.95rem;">
                                 ¿Ya tenés cuenta? 
-                                <a href="{{ path('app_login') }}" style="color: var(--color-naranja); text-decoration: none; font-weight: bold;">Iniciá sesión</a>
+                                <a href="{{ path('app_login') }}" style="color: var(--color-naranja); font-weight: bold;">Iniciá sesión</a>
                             </p>
 
                             {# INICIO DEL FORMULARIO #}
@@ -30,11 +30,11 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Nombre</label>
-                                        <input type="text" class="form-control" name="nombre" placeholder="Nombre" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="nombre" placeholder="Nombre" style="padding: 10px;" required>
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Apellido</label>
-                                        <input type="text" class="form-control" name="apellido" placeholder="Apellido" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="apellido" placeholder="Apellido" style="padding: 10px;" required>
                                     </div>
                                 </div>
 
@@ -42,12 +42,12 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">DNI</label>
-                                        <input type="text" class="form-control" name="dni" placeholder="44.444.444" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="dni" placeholder="DNI" style="padding: 10px;" required>
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Fecha de Nacimiento</label>
                                         {# Usamos type="text" para que se vea el placeholder 33/33/3333 igual a la imagen #}
-                                        <input type="text" class="form-control" name="fechaNacimiento" placeholder="33 / 33 / 3333" style="padding: 10px;">
+                                        <input type="date" class="form-control" name="fechaNacimiento" style="padding: 10px;" required>
                                     </div>
                                 </div>
 
@@ -55,11 +55,11 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Provincia</label>
-                                        <input type="text" class="form-control" name="provincia" placeholder="Provincia" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="provincia" placeholder="Provincia" style="padding: 10px;" required>
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Ciudad</label>
-                                        <input type="text" class="form-control" name="ciudad" placeholder="Ciudad" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="ciudad" placeholder="Ciudad" style="padding: 10px;" required>
                                     </div>
                                 </div>
 
@@ -67,18 +67,18 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Direccion</label>
-                                        <input type="text" class="form-control" name="direccion" placeholder="Direccion, 1234" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="direccion" placeholder="Direccion, 1234" style="padding: 10px;" required>
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
-                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Numero de Teléfono</label>
-                                        <input type="text" class="form-control" name="telefono" placeholder="+54 000 0000" style="padding: 10px;">
+                                        <label class="form-label" style="font-size: 0.85rem; color: #888;">Número de Teléfono</label>
+                                        <input type="text" class="form-control" name="telefono" placeholder="Teléfono" style="padding: 10px;" required>
                                     </div>
                                 </div>
 
                                 {# Fila 5: Correo (Ancho completo) #}
                                 <div class="mb-3">
                                     <label class="form-label" style="font-size: 0.85rem; color: #888;">Correo Electrónico</label>
-                                    <input type="email" class="form-control" name="email" placeholder="ejemplo@correo.com" style="padding: 10px;">
+                                    <input type="email" class="form-control" name="email" placeholder="ejemplo@correo.com" style="padding: 10px;" required>
                                 </div>
 
                                 {# Fila 6: Contraseñas con ícono de ojo #}
@@ -87,7 +87,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Contraseña</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" name="password" placeholder="Ingresa tu contraseña" style="padding: 10px; border-right: 0;">
+                                            <input type="password" class="form-control" name="password" placeholder="Ingresa tu contraseña" style="padding: 10px; border-right: 0;" required>
                                             <span class="input-group-text bg-white border-start-0">
                                                 {# Icono Ojo Tachado SVG #}
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-eye-slash" viewBox="0 0 16 16">
@@ -103,7 +103,7 @@
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Repetir Contraseña</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" name="password_repeat" placeholder="Ingresa tu contraseña" style="padding: 10px; border-right: 0;">
+                                            <input type="password" class="form-control" name="password_repeat" placeholder="Ingresa tu contraseña" style="padding: 10px; border-right: 0;" required>
                                             <span class="input-group-text bg-white border-start-0">
                                                 {# Icono Ojo Tachado SVG #}
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#666" class="bi bi-eye-slash" viewBox="0 0 16 16">

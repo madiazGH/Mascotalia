@@ -16,6 +16,26 @@
 
     {% include 'partials/navbar.html.twig' %}
 
+    <div class="container position-absolute top-10 start-50 translate-middle-x mt-3" style="z-index: 1050; max-width: 600px; width: 90%;">
+        
+        {# Mensajes de Éxito (Verdes) #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show shadow" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        {# Mensajes de Error (Rojos) #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger alert-dismissible fade show shadow" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        
+    </div>
+
         {% block body %}{% endblock %}
 
         <footer class="footer-custom">
