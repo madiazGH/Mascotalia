@@ -55,11 +55,29 @@
                                             <p class="card-text mb-3" style="font-weight: bold; font-size: 1rem; color: #000;">
                                                 {{ solicitud.estado }}
                                             </p>
+
                                             
-                                            {# Botón Cancelar #}
-                                            <button class="btn btn-sm px-3" style="background-color: #C6B6A8; color: #333; font-weight: 500; border-radius: 5px; border: none;">
-                                                Cancelar
-                                            </button>
+                                            {% if solicitud.estado == 'Pendiente' %}
+                                                
+                                                {# Caso 1: Se puede cancelar #}
+                                                {# Usamos un formulario pequeño para que sea seguro o un enlace simple si prefieres #}
+                                                {# Aquí uso enlace directo por simplicidad, pero con confirmación #}
+                                                <a href="{{ path('app_solicitud_cancelar', {id: solicitud.id}) }}" 
+                                                    class="btn btn-sm px-3" 
+                                                    style="background-color: #C6B6A8; color: #333; font-weight: 500; border-radius: 5px; text-decoration: none;"
+                                                    onclick="return confirm('¿Estás seguro de que querés cancelar esta solicitud?');">
+                                                    Cancelar
+                                                </a>
+
+                                            {% else %}
+                                                
+                                                {# Caso 2: Ya no se puede cancelar (En Revisión, Aceptada, etc) #}
+                                                <button class="btn btn-sm px-3" disabled 
+                                                        style="background-color: #e9ecef; color: #999; border: 1px solid #ddd; font-weight: 500; border-radius: 5px; cursor: not-allowed;">
+                                                    No cancelable
+                                                </button>
+
+                                            {% endif %}
 
                                         </div>
                                     </div>

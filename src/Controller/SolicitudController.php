@@ -39,13 +39,14 @@ class SolicitudController extends AbstractController
         $usuario = $this->getUser();
 
         // 1. Validar límite (RN3)
-        $pendientes = $solicitudRepository->count([
+        $cantidadActivas = $solicitudRepository->count([
             'usuario' => $usuario,
-            'estado' => 'Pendiente'
+            'estado' => ['Pendiente', 'En Revisión'] 
         ]);
 
-        if ($pendientes >= 3) {
-            $this->addFlash('error', 'Ya tienes 3 solicitudes pendientes.');
+        if ($cantidadActivas >= 3) {
+            // Actualizamos el mensaje para que sea coherente
+            $this->addFlash('error', 'Ya tienes 3 solicitudes en proceso (Pendientes o En Revisión).');
             return $this->redirectToRoute('app_mascota_detalle', ['id' => $mascota->getId()]);
         }
 
@@ -71,6 +72,31 @@ class SolicitudController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', '¡Solicitud enviada con éxito!');
+
+        return $this->redirectToRoute('app_mis_solicitudes');
+    }
+
+    #[Route('/solicitud/cancelar/{id}', name: 'app_solicitud_cancelar')]
+    public function cancelar(Solicitud $solicitud, EntityManagerInterface $entityManager): Response
+    {
+        // 1. SEGURIDAD: Verificar que la solicitud pertenezca al usuario logueado
+        if ($solicitud->getUsuario() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('No puedes cancelar una solicitud que no es tuya.');
+        }
+
+        // 2. REGLA DE NEGOCIO: Solo se puede cancelar si está "Pendiente"
+        if ($solicitud->getEstado() !== 'Pendiente') {
+            $this->addFlash('error', 'No se puede cancelar la solicitud porque ya está en proceso de revisión.');
+            return $this->redirectToRoute('app_mis_solicitudes');
+        }
+
+        // 3. Proceder a eliminar
+        // (O podrías cambiar el estado a "Cancelada" si prefieres guardar historial, 
+        // pero eliminarla es lo más común para limpiar la lista).
+        $entityManager->remove($solicitud);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'La solicitud ha sido cancelada correctamente.');
 
         return $this->redirectToRoute('app_mis_solicitudes');
     }
