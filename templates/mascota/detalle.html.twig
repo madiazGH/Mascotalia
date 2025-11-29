@@ -52,10 +52,10 @@
                             {# BOTÓN SOLICITAR ADOPCIÓN (Centrado Abajo) #}
                             <div class="row mt-4">
                                 <div class="col-12 text-center">
-                                    {# Nota: Todavía no tenemos la ruta de "solicitar", ponemos # por ahora #}
-                                    <a href="#" class="btn text-white px-5 py-2" style="background-color: #0F5D3C; font-weight: 500; border-radius: 5px; width: 300px; font-size: 1.1rem;">
-                                        Solicitar Adopción
-                                    </a>
+                                    {# Envio el ID de la mascota a la ruta de solicitar #}
+                                <a href="{{ path('app_solicitar_adopcion', {'id': mascota.id}) }}" class="btn text-white px-5 py-2" style="background-color: #0F5D3C; font-weight: 500; border-radius: 5px; width: 300px; font-size: 1.1rem;">
+                                Solicitar Adopción
+                                </a>
                                 </div>
                             </div>
 

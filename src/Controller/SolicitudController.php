@@ -2,41 +2,76 @@
 
 namespace App\Controller;
 
+use App\Entity\Mascota;
+use App\Entity\Solicitud;
+use App\Entity\Usuario;
+use App\Repository\SolicitudRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 class SolicitudController extends AbstractController
 {
-    // Ruta en español, nombre estándar para la navbar
     #[Route('/mis-solicitudes', name: 'app_mis_solicitudes')]
-    public function index(): Response
+    public function index(SolicitudRepository $solicitudRepository): Response
     {
-        // SIMULACIÓN DE DATOS
-        // Esto es temporal hasta que tengamos el Login real funcionando.
-        $solicitudes = [
-            [
-                'mascota' => 'Chiquito',
-                'fecha' => '12 / 05 / 2025',
-                'estado' => 'Pendiente',
-                'imagen' => 'https://images.unsplash.com/photo-1591160690555-5debfba289f0?w=500&auto=format&fit=crop&q=60'
-            ],
-            [
-                'mascota' => 'Rex',
-                'fecha' => '20 / 04 / 2025',
-                'estado' => 'Rechazada',
-                'imagen' => 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&auto=format&fit=crop&q=60'
-            ],
-            [
-                'mascota' => 'Lola',
-                'fecha' => '05 / 06 / 2025',
-                'estado' => 'En Revisión',
-                'imagen' => 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=500&auto=format&fit=crop&q=60'
-            ]
-        ];
+        /** @var Usuario $usuario */
+        $usuario = $this->getUser();
+
+        $solicitudes = $solicitudRepository->findBy(
+            ['usuario' => $usuario], 
+            ['fechaEnvio' => 'DESC']
+        );
 
         return $this->render('solicitud/index.html.twig', [
             'solicitudes' => $solicitudes,
         ]);
+    }
+
+    // ESTA ES LA FUNCIÓN QUE TE FALTA O ESTÁ MAL ESCRITA
+    #[Route('/solicitar/{id}', name: 'app_solicitar_adopcion')]
+    public function solicitar(Mascota $mascota, EntityManagerInterface $entityManager, SolicitudRepository $solicitudRepository): Response
+    {
+        /** @var Usuario $usuario */
+        $usuario = $this->getUser();
+
+        // 1. Validar límite (RN3)
+        $pendientes = $solicitudRepository->count([
+            'usuario' => $usuario,
+            'estado' => 'Pendiente'
+        ]);
+
+        if ($pendientes >= 3) {
+            $this->addFlash('error', 'Ya tienes 3 solicitudes pendientes.');
+            return $this->redirectToRoute('app_mascota_detalle', ['id' => $mascota->getId()]);
+        }
+
+        // 2. Validar duplicado (RN2)
+        $existe = $solicitudRepository->findOneBy([
+            'usuario' => $usuario,
+            'mascota' => $mascota,
+        ]);
+
+        if ($existe) {
+            $this->addFlash('error', 'Ya enviaste una solicitud para esta mascota.');
+            return $this->redirectToRoute('app_mascota_detalle', ['id' => $mascota->getId()]);
+        }
+
+        // 3. Crear Solicitud
+        $solicitud = new Solicitud();
+        $solicitud->setUsuario($usuario);
+        $solicitud->setMascota($mascota);
+        $solicitud->setFechaEnvio(new \DateTime());
+        $solicitud->setEstado('Pendiente');
+
+        $entityManager->persist($solicitud);
+        $entityManager->flush();
+
+        $this->addFlash('success', '¡Solicitud enviada con éxito!');
+
+        return $this->redirectToRoute('app_mis_solicitudes');
     }
 }

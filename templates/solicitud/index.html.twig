@@ -25,34 +25,38 @@
                             <div class="card mb-4 shadow-sm" style="border-radius: 15px; border: 2px solid #e0e0e0; overflow: hidden;">
                                 <div class="row g-0 align-items-center">
                                     
-                                    {# Columna Foto (Izquierda) #}
+                                    {# Columna Foto #}
                                     <div class="col-md-4 p-3">
                                         <div style="aspect-ratio: 1/1; overflow: hidden; border-radius: 12px;">
-                                            <img src="{{ solicitud.imagen }}" 
-                                                    class="img-fluid rounded-start" 
-                                                    alt="{{ solicitud.mascota }}" 
-                                                    style="width: 100%; height: 100%; object-fit: cover;">
+                                            {# OJO: Accedemos a solicitud.mascota.imagen #}
+                                            {# Si usas URLs de internet en fixtures, quita la función asset() #}
+                                            <img src="{{ solicitud.mascota.imagen }}" 
+                                                class="img-fluid rounded-start" 
+                                                alt="{{ solicitud.mascota.nombre }}" 
+                                                style="width: 100%; height: 100%; object-fit: cover;">
                                         </div>
                                     </div>
                                     
-                                    {# Columna Datos (Derecha) #}
+                                    {# Columna Datos #}
                                     <div class="col-md-8">
                                         <div class="card-body">
                                             
-                                            {# Nombre Mascota #}
-                                            <h3 class="card-title mb-2" style="font-weight: bold; font-size: 1.8rem; color: #000;">{{ solicitud.mascota }}</h3>
+                                            {# Nombre Mascota (solicitud.mascota.nombre) #}
+                                            <h3 class="card-title mb-2" style="font-weight: bold; font-size: 1.8rem; color: #000;">
+                                                {{ solicitud.mascota.nombre }}
+                                            </h3>
                                             
-                                            {# Fecha #}
+                                            {# Fecha (solicitud.fechaEnvio con filtro date) #}
                                             <p class="card-text mb-2" style="font-size: 0.85rem; color: #333;">
-                                                Fecha de envio de solicitud - {{ solicitud.fecha }}
+                                                Fecha de envio de solicitud - {{ solicitud.fechaEnvio|date('d / m / Y') }}
                                             </p>
                                             
-                                            {# Estado (Label) #}
+                                            {# Estado (solicitud.estado) #}
                                             <p class="card-text mb-3" style="font-weight: bold; font-size: 1rem; color: #000;">
                                                 {{ solicitud.estado }}
                                             </p>
                                             
-                                            {# Botón Cancelar (Color Beige/Grisáceo) #}
+                                            {# Botón Cancelar #}
                                             <button class="btn btn-sm px-3" style="background-color: #C6B6A8; color: #333; font-weight: 500; border-radius: 5px; border: none;">
                                                 Cancelar
                                             </button>
@@ -61,8 +65,13 @@
                                     </div>
                                 </div>
                             </div>
-                            {# Fin Tarjeta #}
-
+                            
+                        {% else %}
+                            {# Mensaje si no tiene solicitudes #}
+                            <div class="text-center py-5">
+                                <h4 class="text-muted">Aún no has enviado ninguna solicitud.</h4>
+                                <a href="{{ path('app_mascotas') }}" class="btn mt-3 text-white" style="background-color: #0F5D3C;">Ver Mascotas</a>
+                            </div>
                         {% endfor %}
 
                     </div>
