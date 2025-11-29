@@ -51,12 +51,17 @@
                                                 Fecha de envio de solicitud - {{ solicitud.fechaEnvio|date('d / m / Y') }}
                                             </p>
                                             
-                                            {# Estado (solicitud.estado) #}
-                                            <p class="card-text mb-3" style="font-weight: bold; font-size: 1rem; color: #000;">
-                                                {{ solicitud.estado }}
-                                            </p>
+                                            <div>
+                                                {# Estado (solicitud.estado) #}
+                                                {% if solicitud.estado == 'Aceptada' %}
+                                                <span class="fw-bold text-success">{{ solicitud.estado }}</span>
+                                                {% elseif solicitud.estado == 'Rechazada' %}
+                                                    <span class="fw-bold text-danger">{{ solicitud.estado }}</span>
+                                                {% else %}
+                                                    <span class="fw-bold">{{ solicitud.estado }}</span>
+                                                {% endif %}
+                                            </div>
 
-                                            
                                             {% if solicitud.estado == 'Pendiente' %}
                                                 
                                                 {# Caso 1: Se puede cancelar #}
@@ -64,7 +69,7 @@
                                                 {# Aquí uso enlace directo por simplicidad, pero con confirmación #}
                                                 <a href="{{ path('app_solicitud_cancelar', {id: solicitud.id}) }}" 
                                                     class="btn btn-sm px-3" 
-                                                    style="background-color: #C6B6A8; color: #333; font-weight: 500; border-radius: 5px; text-decoration: none;"
+                                                    style="background-color: #C6B6A8; color: #333; font-weight: 500; border-radius: 5px; text-decoration: none; margin-top: 10px;"
                                                     onclick="return confirm('¿Estás seguro de que querés cancelar esta solicitud?');">
                                                     Cancelar
                                                 </a>
@@ -73,7 +78,7 @@
                                                 
                                                 {# Caso 2: Ya no se puede cancelar (En Revisión, Aceptada, etc) #}
                                                 <button class="btn btn-sm px-3" disabled 
-                                                        style="background-color: #e9ecef; color: #999; border: 1px solid #ddd; font-weight: 500; border-radius: 5px; cursor: not-allowed;">
+                                                        style="background-color: #e9ecef; color: #999; border: 1px solid #ddd; font-weight: 500; border-radius: 5px; cursor: not-allowed; margin-top: 10px;">
                                                     No cancelable
                                                 </button>
 

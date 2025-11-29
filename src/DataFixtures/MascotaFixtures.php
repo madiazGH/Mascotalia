@@ -9,18 +9,26 @@ class MascotaFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        $edades = ['Cachorro', 'Joven', 'Adulto', 'Abuelo'];
+        $tamanos = ['Pequeño', 'Mediano', 'Grande'];
+        $especies = ['Perro', 'Gato'];
+
         for ($i = 1; $i < 11; $i++) {
             $mascota = new Mascota();
-            $mascota->setNombre('Carlitos');
-            $mascota->setEspecie('Perro');
-            $mascota->setEdad(5);
-            $mascota->setTamaño('Grande');
-            $mascota->setDescripcion('Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum....');
-            $mascota->setImagen("https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGRvZ3xlbnwwfHwwfHx8MA%3D%3D");
-            $mascota->setDisponible(1);
+            $mascota->setNombre('Mascota ' . $i);
+            
+            // Elegimos valores al azar de los arrays
+            $mascota->setEspecie($especies[array_rand($especies)]);
+            $mascota->setEdad($edades[array_rand($edades)]); // <--- CAMBIO AQUÍ
+            $mascota->setTamaño($tamanos[array_rand($tamanos)]);
+            
+            // ... resto del código (imagen, descripcion, etc) ...
+            $mascota->setDescripcion('Descripción de prueba...');
+            $mascota->setImagen("https://images.unsplash.com/photo-1591160690555-5debfba289f0?random=$i");
+            $mascota->setDisponible(true);
+            
             $manager->persist($mascota);
-            }
-
+        }
         $manager->flush();
     }
 }

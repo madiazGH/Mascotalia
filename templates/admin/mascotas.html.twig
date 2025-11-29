@@ -17,17 +17,32 @@
                 {# BARRA DE HERRAMIENTAS #}
                     <div class="d-flex justify-content-center align-items-center mb-5 flex-wrap gap-4">                    
                     {# 1. Botón Filtros (Verde oscuro) #}
-                    <button class="btn text-white px-4" style="background-color: #0F5D3C; border-radius: 5px;">
+                    <button class="btn text-white px-4" 
+                            style="background-color: #0F5D3C; border-radius: 5px;"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modalAdminFiltros">
                         Filtros
                     </button>
 
-                    {# 2. Dropdown Ordenar (Centro) #}
-                    <select class="form-select w-auto text-center" style="border-radius: 5px; border-color: #ccc; min-width: 200px;">
+                    {# Dropdown Ordenar Admin #}
+                    <select class="form-select w-auto text-center" 
+                            style="border-radius: 5px; border-color: #ccc; min-width: 200px;"
+                            onchange="actualizarOrdenAdmin(this.value)">
                         <option selected>Ordenar por...</option>
-                        <option value="1">Más recientes</option>
-                        <option value="2">Más antiguas</option>
-                        <option value="3">Más solicitudes</option>
+                        <option value="reciente" {{ filtros.orden == 'reciente' ? 'selected' : '' }}>Más recientes</option>
+                        <option value="antigua" {{ filtros.orden == 'antigua' ? 'selected' : '' }}>Más antiguas</option>
+                        <option value="mas_solicitudes" {{ filtros.orden == 'mas_solicitudes' ? 'selected' : '' }}>Más solicitudes</option>
+                        <option value="menos_solicitudes" {{ filtros.orden == 'menos_solicitudes' ? 'selected' : '' }}>Menos solicitudes</option>
                     </select>
+
+                    {# SCRIPT #}
+                    <script>
+                        function actualizarOrdenAdmin(valor) {
+                            const url = new URL(window.location.href);
+                            url.searchParams.set('orden', valor);
+                            window.location.href = url.toString();
+                        }
+                    </script>
 
                     {# 3. Botón Añadir (Verde oscuro) - Lo conectaremos luego #}
                     <a href="{{ path('app_admin_mascota_agregar') }}" class="btn text-white px-4" style="background-color: #0F5D3C; border-radius: 5px;">
@@ -83,6 +98,53 @@
                 </div>
 
             </div>
+        </div>
+        <div class="modal fade" id="modalAdminFiltros" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Filtrar Inventario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ path('app_admin_mascotas') }}" method="get">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Especie</label>
+                        <select class="form-select" name="especie">
+                            <option value="">Todas</option>
+                            <option value="Perro" {{ filtros.especie == 'Perro' ? 'selected' : '' }}>Perro</option>
+                            <option value="Gato" {{ filtros.especie == 'Gato' ? 'selected' : '' }}>Gato</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Estado</label>
+                        <select class="form-select" name="estado">
+                            <option value="">Todos</option>
+                            <option value="1" {{ filtros.estado == '1' ? 'selected' : '' }}>Disponible</option>
+                            <option value="0" {{ filtros.estado == '0' ? 'selected' : '' }}>No disponible</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tamaño</label>
+                        <select class="form-select" name="tamano">
+                            <option value="">Todos</option>
+                            <option value="Pequeño" {{ filtros.tamano == 'Pequeño' ? 'selected' : '' }}>Pequeño</option>
+                            <option value="Mediano" {{ filtros.tamano == 'Mediano' ? 'selected' : '' }}>Mediano</option>
+                            <option value="Grande" {{ filtros.tamano == 'Grande' ? 'selected' : '' }}>Grande</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn text-white" style="background-color: #0F5D3C;">Aplicar Filtrar</button>
+                        <a href="{{ path('app_admin_mascotas') }}" class="btn btn-outline-secondary">Limpiar Filtros</a>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
         </div>
     </div>
 

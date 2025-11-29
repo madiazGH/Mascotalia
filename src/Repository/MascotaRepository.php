@@ -49,4 +49,125 @@ class MascotaRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult();
         }
+
+        public function buscarConFiltros($especie, $tamano, $edad, $orden) // Agregamos $orden
+        {
+            $qb = $this->createQueryBuilder('m')
+                ->where('m.disponible = :disponible')
+                ->setParameter('disponible', true);
+
+            if ($especie) {
+                $qb->andWhere('m.especie = :especie')
+                ->setParameter('especie', $especie);
+            }
+
+            if ($tamano) {
+                $qb->andWhere('m.tamano = :tamano') 
+                ->setParameter('tamano', $tamano);
+            }
+
+            if ($edad) {
+                $qb->andWhere('m.edad = :edad')
+                ->setParameter('edad', $edad);
+            }
+
+            // LÓGICA DE ORDENAMIENTO
+            switch ($orden) {
+                case 'antigua':
+                    $qb->orderBy('m.id', 'ASC'); // ID más bajo = Más vieja
+                    break;
+                default: // 'reciente' o null
+                    $qb->orderBy('m.id', 'DESC'); // ID más alto = Más nueva
+                    break;
+            }
+
+            return $qb->getQuery()->getResult();
+        }
+
+        public function buscarParaAdmin($especie, $tamano, $edad, $estado, $orden) // Agregamos $orden
+        {
+            $qb = $this->createQueryBuilder('m');
+
+            if ($especie) {
+                $qb->andWhere('m.especie = :especie')->setParameter('especie', $especie);
+            }
+            if ($tamano) {
+                $qb->andWhere('m.tamano = :tamano')->setParameter('tamano', $tamano);
+            }
+            if ($edad) {
+                $qb->andWhere('m.edad = :edad')->setParameter('edad', $edad);
+            }
+            // Filtro especial para Admin: Estado (Disponible o No)
+            if ($estado !== null && $estado !== '') {
+                $esDisponible = ($estado === '1'); // Convertimos "1" a true, "0" a false
+                $qb->andWhere('m.disponible = :disp')->setParameter('disp', $esDisponible);
+            }
+
+            // LÓGICA DE ORDENAMIENTO
+            if ($orden === 'mas_solicitudes') {
+                $qb->leftJoin('m.solicitudes', 's')
+                ->addSelect('COUNT(s.id) as HIDDEN req_count')
+                ->groupBy('m.id')
+                ->orderBy('req_count', 'DESC'); // Mayor a menor
+                
+            } elseif ($orden === 'menos_solicitudes') { 
+                // --- NUEVO CASO ---
+                $qb->leftJoin('m.solicitudes', 's')
+                ->addSelect('COUNT(s.id) as HIDDEN req_count')
+                ->groupBy('m.id')
+                ->orderBy('req_count', 'ASC'); // Menor a mayor (0 solicitudes primero)
+                
+            } elseif ($orden === 'antigua') {
+                $qb->orderBy('m.id', 'ASC');
+            } else {
+                // Default: Reciente
+                $qb->orderBy('m.id', 'DESC');
+            }
+
+            return $qb->getQuery()->getResult();
+        }
+
+        public function buscarSolicitadasConFiltros($especie, $tamano, $orden) // Agregamos $orden
+        {
+            $qb = $this->createQueryBuilder('m')
+                ->innerJoin('m.solicitudes', 's')
+                ->groupBy('m.id');
+
+            // Filtros (Igual que antes)
+            if ($especie) {
+                $qb->andWhere('m.especie = :especie')->setParameter('especie', $especie);
+            }
+            if ($tamano) {
+                $qb->andWhere('m.tamano = :tamano')->setParameter('tamano', $tamano);
+            }
+
+            // LÓGICA DE ORDENAMIENTO ACTUALIZADA
+            $qb->addSelect('COUNT(s.id) as HIDDEN req_count'); // Para popularidad
+
+            switch ($orden) {
+                case 'mas_solicitudes':
+                    $qb->orderBy('req_count', 'DESC');
+                    break;
+                case 'menos_solicitudes':
+                    $qb->orderBy('req_count', 'ASC');
+                    break;
+                    
+                // --- NUEVO CASO: MÁS ANTIGUAS ---
+                case 'antigua':
+                    // Buscamos la solicitud más vieja (MIN id) de cada mascota
+                    // y mostramos primero las que tengan fechas más antiguas
+                    $qb->addSelect('MIN(s.id) as HIDDEN min_sol_id')
+                    ->orderBy('min_sol_id', 'ASC');
+                    break;
+                // --------------------------------
+
+                default: // 'reciente'
+                    // Solicitud más nueva (MAX id) primero
+                    $qb->addSelect('MAX(s.id) as HIDDEN max_sol_id')
+                    ->orderBy('max_sol_id', 'DESC');
+                    break;
+            }
+
+            return $qb->getQuery()->getResult();
+        }
 }

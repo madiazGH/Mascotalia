@@ -6,6 +6,62 @@
 
     {# --- FONDO MARRÓN (Contenedor externo) --- #}
     <div style="background-color: #846355; min-height: 85vh; padding: 40px 0;">
+    <div class="modal fade" id="modalFiltros" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Filtrar Mascotas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <form action="{{ path('app_mascotas') }}" method="get">
+                    
+                    {# Especie #}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Especie</label>
+                        <select class="form-select" name="especie">
+                            <option value="">Todas</option>
+                            <option value="Perro" {{ filtros.especie == 'Perro' ? 'selected' : '' }}>Perro</option>
+                            <option value="Gato" {{ filtros.especie == 'Gato' ? 'selected' : '' }}>Gato</option>
+                        </select>
+                    </div>
+
+                    {# Tamaño #}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tamaño</label>
+                        <select class="form-select" name="tamano">
+                            <option value="">Todos</option>
+                            <option value="Pequeño" {{ filtros.tamano == 'Pequeño' ? 'selected' : '' }}>Pequeño</option>
+                            <option value="Mediano" {{ filtros.tamano == 'Mediano' ? 'selected' : '' }}>Mediano</option>
+                            <option value="Grande" {{ filtros.tamano == 'Grande' ? 'selected' : '' }}>Grande</option>
+                        </select>
+                    </div>
+
+                    {# Edad (Ahora String) #}
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Etapa de Vida</label>
+                        <select class="form-select" name="edad">
+                            <option value="">Todas</option>
+                            <option value="Cachorro" {{ filtros.edad == 'Cachorro' ? 'selected' : '' }}>Cachorro</option>
+                            <option value="Joven" {{ filtros.edad == 'Joven' ? 'selected' : '' }}>Joven</option>
+                            <option value="Adulto" {{ filtros.edad == 'Adulto' ? 'selected' : '' }}>Adulto</option>
+                            <option value="Abuelo" {{ filtros.edad == 'Abuelo' ? 'selected' : '' }}>Abuelo</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn text-white" style="background-color: #0F5D3C;">Aplicar Filtros</button>
+                        {# Enlace para limpiar (vuelve a la ruta sin parámetros) #}
+                        <a href="{{ path('app_mascotas') }}" class="btn btn-outline-secondary">Limpiar Filtros</a>
+                    </div>
+
+                </form>
+
+            </div>
+            </div>
+        </div>
+        </div>
         <div class="container">
             
             {# --- GRAN TARJETA BLANCA CENTRAL --- #}
@@ -18,17 +74,30 @@
                 <div class="d-flex justify-content-center gap-3 mb-5">
                     
                     {# Botón Filtros #}
-                    <button class="btn text-white px-4" style="background-color: #0F5D3C; border-radius: 5px; font-weight: 500;">
+                    <button class="btn text-white px-4" style="background-color: #0F5D3C; border-radius: 5px; font-weight: 500;" data-bs-toggle="modal" data-bs-target="#modalFiltros">
                         Filtros
                     </button>
 
                     {# Dropdown Ordenar #}
-                    <select class="form-select w-auto" style="border-radius: 5px; border-color: #ccc; min-width: 200px;">
+                    <select class="form-select w-auto" 
+                            style="border-radius: 5px; border-color: #ccc; min-width: 200px;"
+                            onchange="actualizarOrden(this.value)">
                         <option selected>Ordenar por...</option>
-                        <option value="1">Más recientes</option>
-                        <option value="2">Mayor edad</option>
-                        <option value="3">Menor edad</option>
+                        <option value="reciente" {{ filtros.orden == 'reciente' ? 'selected' : '' }}>Más recientes</option>
+                        <option value="antigua" {{ filtros.orden == 'antigua' ? 'selected' : '' }}>Más antiguas</option>
                     </select>
+
+                    {# SCRIPT PARA QUE FUNCIONE SIN PERDER FILTROS #}
+                    <script>
+                        function actualizarOrden(valor) {
+                            // Obtenemos la URL actual con sus filtros (?especie=Perro...)
+                            const url = new URL(window.location.href);
+                            // Cambiamos o agregamos el parámetro 'orden'
+                            url.searchParams.set('orden', valor);
+                            // Recargamos la página
+                            window.location.href = url.toString();
+                        }
+                    </script>
                 </div>
 
                 {# --- GRILLA DE MASCOTAS --- #}
@@ -59,7 +128,7 @@
                                     </h5>
                                     
                                     <p class="card-text text-muted mb-3" style="font-size: 0.9rem;">
-                                        {{ mascota.especie }} - {{ mascota.edad }} años
+                                        {{ mascota.especie }} - {{ mascota.edad }} - {{ mascota.tamano }}
                                     </p>
                                     
                                     {# LINK AL DETALLE #}

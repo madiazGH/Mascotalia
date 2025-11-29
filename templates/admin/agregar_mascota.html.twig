@@ -35,8 +35,13 @@
                                 {# Edad y Tamaño #}
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label text-muted small">Edad (Años)</label>
-                                        <input type="number" class="form-control" name="edad" placeholder="Ej: 2" required>
+                                        <label class="form-label text-muted small">Edad</label>
+                                        <select class="form-select" name="edad">
+                                            <option value="Cachorro">Cachorro (0-1 año)</option>
+                                            <option value="Joven">Jóven (1-5 años)</option>
+                                            <option value="Adulto" selected>Adulto (5-9 años)</option>
+                                            <option value="Abuelo">Abuelo (+10 años)</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label text-muted small">Tamaño</label>

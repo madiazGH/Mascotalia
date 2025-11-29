@@ -34,15 +34,20 @@
                                 {# Edad y Tamaño #}
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label text-muted small">Edad (Años)</label>
-                                        <input type="number" class="form-control" name="edad" value="{{ mascota.edad }}" required>
+                                        <label class="form-label text-muted small">Edad</label>
+                                        <select class="form-select" name="edad">
+                                            <option value="Cachorro" {{ mascota.edad == 'Cachorro' ? 'selected' : '' }}>Cachorro</option>
+                                            <option value="Joven" {{ mascota.edad == 'Joven' ? 'selected' : '' }}>Jóven</option>
+                                            <option value="Adulto" {{ mascota.edad == 'Adulto' ? 'selected' : '' }}>Adulto</option>
+                                            <option value="Abuelo" {{ mascota.edad == 'Abuelo' ? 'selected' : '' }}>Abuelo</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label text-muted small">Tamaño</label>
                                         <select class="form-select" name="tamano">
-                                            <option value="Pequeño" {{ mascota.tamaño == 'Pequeño' ? 'selected' : '' }}>Pequeño</option>
-                                            <option value="Mediano" {{ mascota.tamaño == 'Mediano' ? 'selected' : '' }}>Mediano</option>
-                                            <option value="Grande" {{ mascota.tamaño == 'Grande' ? 'selected' : '' }}>Grande</option>
+                                            <option value="Pequeño" {{ mascota.tamano == 'Pequeño' ? 'selected' : '' }}>Pequeño</option>
+                                            <option value="Mediano" {{ mascota.tamano == 'Mediano' ? 'selected' : '' }}>Mediano</option>
+                                            <option value="Grande" {{ mascota.tamano == 'Grande' ? 'selected' : '' }}>Grande</option>
                                         </select>
                                     </div>
                                 </div>

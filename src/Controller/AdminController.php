@@ -18,14 +18,28 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AdminController extends AbstractController
 {
     #[Route('/mascotas', name: 'app_admin_mascotas')]
-    public function gestionarMascotas(MascotaRepository $mascotaRepository): Response
+    public function gestionarMascotas(MascotaRepository $mascotaRepository, Request $request): Response
     {
-        // Traemos todas las mascotas (disponibles o no)
-        // El orden por defecto será por ID descendente
-        $mascotas = $mascotaRepository->findBy([], ['id' => 'DESC']);
+        // 1. Capturar filtros
+        $especie = $request->query->get('especie');
+        $tamano = $request->query->get('tamano');
+        $edad = $request->query->get('edad');
+        $estado = $request->query->get('estado'); // "1" o "0"
+        $orden = $request->query->get('orden');
+
+        // 2. Buscar
+        $mascotas = $mascotaRepository->buscarParaAdmin($especie, $tamano, $edad, $estado, $orden);
 
         return $this->render('admin/mascotas.html.twig', [
             'mascotas' => $mascotas,
+            // Enviamos los filtros de vuelta para mantener los selects marcados
+            'filtros' => [
+                'especie' => $especie,
+                'tamano' => $tamano,
+                'edad' => $edad,
+                'estado' => $estado,
+                'orden' => $orden
+            ]
         ]);
     }
 
@@ -40,8 +54,8 @@ class AdminController extends AbstractController
             
             $mascota->setNombre($request->request->get('nombre'));
             $mascota->setEspecie($request->request->get('especie'));
-            $mascota->setEdad((int)$request->request->get('edad'));
-            $mascota->setTamaño($request->request->get('tamano')); // Cuidado con la Ñ en el name del HTML
+            $mascota->setEdad($request->request->get('edad'));
+            $mascota->setTamano($request->request->get('tamano')); // Cuidado con la Ñ en el name del HTML
             $mascota->setDescripcion($request->request->get('descripcion'));
             $mascota->setImagen($request->request->get('imagen')); // Por ahora URL texto
 
@@ -97,7 +111,7 @@ class AdminController extends AbstractController
             $mascota->setNombre($request->request->get('nombre'));
             $mascota->setEspecie($request->request->get('especie'));
             $mascota->setEdad((int)$request->request->get('edad'));
-            $mascota->setTamaño($request->request->get('tamano'));
+            $mascota->setTamano($request->request->get('tamano'));
             $mascota->setDescripcion($request->request->get('descripcion'));
             $mascota->setImagen($request->request->get('imagen'));
 

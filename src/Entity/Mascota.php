@@ -21,11 +21,11 @@ class Mascota
     #[ORM\Column(length: 255)]
     private ?string $especie = null;
 
-    #[ORM\Column]
-    private ?int $edad = null;
+    #[ORM\Column(length: 20)] 
+    private ?string $edad = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $tamaño = null;
+    private ?string $tamano = null;
 
     #[ORM\Column(length: 255)]
     private ?string $descripcion = null;
@@ -83,27 +83,26 @@ class Mascota
         return $this;
     }
 
-    public function getEdad(): ?int
+    public function getEdad(): ?string
     {
         return $this->edad;
     }
 
-    public function setEdad(int $edad): static
+    public function setEdad(string $edad): static
     {
         $this->edad = $edad;
 
         return $this;
     }
 
-    public function getTamaño(): ?string
+    public function getTamano(): ?string
     {
-        return $this->tamaño;
+        return $this->tamano;
     }
 
-    public function setTamaño(string $tamaño): static
+    public function setTamano(string $tamano): static
     {
-        $this->tamaño = $tamaño;
-
+        $this->tamano = $tamano;
         return $this;
     }
 

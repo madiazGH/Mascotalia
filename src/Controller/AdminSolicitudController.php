@@ -18,12 +18,24 @@ class AdminSolicitudController extends AbstractController
 {
     // PANTALLA 1: LISTA DE MASCOTAS SOLICITADAS
     #[Route('/', name: 'app_admin_solicitudes')]
-    public function index(MascotaRepository $mascotaRepo): Response
+    public function index(MascotaRepository $mascotaRepo, Request $request): Response
     {
-        $mascotas = $mascotaRepo->buscarMascotasConSolicitudes();
+        $especie = $request->query->get('especie');
+        $tamano = $request->query->get('tamano');
+        
+        // 1. Capturar orden
+        $orden = $request->query->get('orden');
+
+        // 2. Pasar al repo
+        $mascotas = $mascotaRepo->buscarSolicitadasConFiltros($especie, $tamano, $orden);
 
         return $this->render('admin_solicitud/index.html.twig', [
             'mascotas' => $mascotas,
+            'filtros' => [
+                'especie' => $especie, 
+                'tamano' => $tamano,
+                'orden' => $orden // 3. Devolver a la vista
+            ]
         ]);
     }
 
