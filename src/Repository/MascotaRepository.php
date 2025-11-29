@@ -40,4 +40,13 @@ class MascotaRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+        public function buscarMascotasConSolicitudes()
+        {
+            return $this->createQueryBuilder('m')
+                ->innerJoin('m.solicitudes', 's') // Solo mascotas que tengan unión con solicitudes
+                ->groupBy('m.id') // Agrupar para no repetir la mascota si tiene 5 solicitudes
+                ->getQuery()
+                ->getResult();
+        }
 }

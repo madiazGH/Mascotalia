@@ -267,4 +267,13 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getEdad(): int
+    {
+        if ($this->fechaNacimiento === null) {
+            return 0;
+        }
+        $now = new \DateTime();
+        return $now->diff($this->fechaNacimiento)->y;
+    }
 }

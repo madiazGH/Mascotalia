@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nueva Mascota{% endblock %}
+
+{% block body %}
+
+    <div style="background-color: #846355; min-height: 85vh; padding: 60px 0; display: flex; align-items: center;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    
+                    <div class="card border-0 shadow-lg" style="border-radius: 12px; padding: 2rem;">
+                        <div class="card-body">
+                            
+                            <h2 class="mb-4 text-center" style="color: #000; font-weight: bold;">Nueva Mascota</h2>
+                            <p class="text-center text-muted mb-4">Ingresa los datos del nuevo integrante</p>
+
+                            <form action="{{ path('app_admin_mascota_agregar') }}" method="post">
+                                
+                                {# Nombre y Especie #}
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small">Nombre</label>
+                                        <input type="text" class="form-control" name="nombre" placeholder="Ej: Fido" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small">Especie</label>
+                                        <select class="form-select" name="especie">
+                                            <option value="Perro" selected>Perro</option>
+                                            <option value="Gato">Gato</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {# Edad y Tamaño #}
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small">Edad (Años)</label>
+                                        <input type="number" class="form-control" name="edad" placeholder="Ej: 2" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small">Tamaño</label>
+                                        <select class="form-select" name="tamano">
+                                            <option value="Pequeño">Pequeño</option>
+                                            <option value="Mediano" selected>Mediano</option>
+                                            <option value="Grande">Grande</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {# URL Imagen #}
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small">URL de la Imagen</label>
+                                    <input type="text" class="form-control" name="imagen" placeholder="https://..." required>
+                                    <div class="form-text">Pega aquí el enlace de la foto.</div>
+                                </div>
+
+                                {# Descripción #}
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small">Descripción</label>
+                                    <textarea class="form-control" name="descripcion" rows="4" placeholder="Cuenta un poco sobre su personalidad..." required></textarea>
+                                </div>
+
+                                {# Botones #}
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="{{ path('app_admin_mascotas') }}" class="btn btn-outline-secondary px-4">Cancelar</a>
+                                    <button type="submit" class="btn text-white px-5" style="background-color: #0F5D3C;">Guardar Mascota</button>
+                                </div>
+
+                            </form>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

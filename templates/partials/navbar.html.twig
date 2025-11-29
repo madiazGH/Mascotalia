@@ -21,8 +21,8 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     {# --- MENÚ DE ADMIN --- #}
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Gestionar Mascotas</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-custom" href="#">Gestionar Solicitudes</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_admin_mascotas') }}">Gestionar Mascotas</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_admin_solicitudes') }}">Gestionar Solicitudes</a></li>
 
                 {% elseif app.user %}
                     {# --- MENÚ DE CLIENTE LOGUEADO --- #}

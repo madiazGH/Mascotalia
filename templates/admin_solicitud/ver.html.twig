@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Solicitudes de {{ mascota.nombre }}{% endblock %}
+
+{% block body %}
+    
+    <div style="background-color: #846355; min-height: 85vh; padding: 40px 0;">
+        <div class="container">
+            
+            <div class="bg-white shadow-lg" style="border-radius: 12px; padding: 40px; min-height: 80vh;">
+                
+                {# Título #}
+                <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">
+                    Solicitudes de [{{ mascota.nombre }}]
+                </h2>
+
+                {# LISTA DE SOLICITUDES #}
+                {% for solicitud in solicitudes %}
+                    <div class="card mb-4 p-3 shadow-sm" style="border-radius: 10px; border: 1px solid #eee;">
+                        <div class="row">
+                            
+                            {# COLUMNA IZQUIERDA: DATOS DEL USUARIO #}
+                            <div class="col-md-6 border-end">
+                                <p class="text-muted small mb-1">Datos</p>
+                                <h5 class="fw-bold mb-3">{{ solicitud.usuario.nombre }} {{ solicitud.usuario.apellido }}</h5>
+                                
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Dirección</small>
+                                        <span class="small">{{ solicitud.usuario.direccion }} <br> {{ solicitud.usuario.ciudad }}, {{ solicitud.usuario.provincia }}</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Teléfono</small>
+                                        <span class="small">{{ solicitud.usuario.telefono }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Edad</small>
+                                        <span class="small">{{ solicitud.usuario.edad }}</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Correo electrónico</small>
+                                        <span class="small">{{ solicitud.usuario.email }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# COLUMNA DERECHA: DATOS DE LA SOLICITUD #}
+                            <div class="col-md-6 ps-md-4">
+                                <p class="text-muted small mb-1">Datos</p>
+                                <h5 class="fw-bold mb-3">Solicitud #{{ solicitud.id }}</h5>
+
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">Fecha</small>
+                                    <span>{{ solicitud.fechaEnvio|date('d/m/Y') }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-muted d-block">Estado</small>
+                                        
+                                        {# Colores según estado #}
+                                        {% if solicitud.estado == 'Aceptada' %}
+                                            <span class="fw-bold text-success">{{ solicitud.estado }}</span>
+                                        {% elseif solicitud.estado == 'Rechazada' %}
+                                            <span class="fw-bold text-danger">{{ solicitud.estado }}</span>
+                                        {% else %}
+                                            <span class="fw-bold">{{ solicitud.estado }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                    {# BOTÓN MODIFICAR ESTADO (Abre Modal o Formulario) #}
+                                    {# Aquí usamos un formulario simple inline para cambiar rápido #}
+                                    <form action="{{ path('app_admin_cambiar_estado', {id: solicitud.id}) }}" method="post" class="d-inline-flex gap-2">
+                                        
+                                        <select name="estado" class="form-select form-select-sm" style="width: auto;">
+                                            <option value="Pendiente" {{ solicitud.estado == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                            <option value="En Revisión" {{ solicitud.estado == 'En Revisión' ? 'selected' : '' }}>En Revisión</option>
+                                            <option value="Aceptada" {{ solicitud.estado == 'Aceptada' ? 'selected' : '' }}>Aceptada</option>
+                                            <option value="Rechazada" {{ solicitud.estado == 'Rechazada' ? 'selected' : '' }}>Rechazada</option>
+                                        </select>
+
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                            Modificar
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-center">No hay solicitudes para esta mascota.</p>
+                {% endfor %}
+
+                <div class="mt-4">
+                    <a href="{{ path('app_admin_solicitudes') }}" class="text-muted text-decoration-none">← Volver al listado</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

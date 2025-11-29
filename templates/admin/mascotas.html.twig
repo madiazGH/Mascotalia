@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestionar Mascotas{% endblock %}
+
+{% block body %}
+    
+    {# FONDO MARRÓN EXTERNO #}
+    <div style="background-color: #846355; min-height: 85vh; padding: 40px 0;">
+        <div class="container">
+            
+            {# CONTENEDOR BLANCO CENTRAL #}
+            <div class="bg-white shadow-lg" style="border-radius: 12px; padding: 40px; min-height: 80vh;">
+                
+                {# TÍTULO #}
+                <h2 class="text-center mb-5" style="color: #000; font-weight: bold; font-size: 1.8rem;">Gestionar Mascotas</h2>
+
+                {# BARRA DE HERRAMIENTAS #}
+                    <div class="d-flex justify-content-center align-items-center mb-5 flex-wrap gap-4">                    
+                    {# 1. Botón Filtros (Verde oscuro) #}
+                    <button class="btn text-white px-4" style="background-color: #0F5D3C; border-radius: 5px;">
+                        Filtros
+                    </button>
+
+                    {# 2. Dropdown Ordenar (Centro) #}
+                    <select class="form-select w-auto text-center" style="border-radius: 5px; border-color: #ccc; min-width: 200px;">
+                        <option selected>Ordenar por...</option>
+                        <option value="1">Más recientes</option>
+                        <option value="2">Más antiguas</option>
+                        <option value="3">Más solicitudes</option>
+                    </select>
+
+                    {# 3. Botón Añadir (Verde oscuro) - Lo conectaremos luego #}
+                    <a href="{{ path('app_admin_mascota_agregar') }}" class="btn text-white px-4" style="background-color: #0F5D3C; border-radius: 5px;">
+                        Añadir Mascotas
+                    </a>
+                </div>
+
+                {# GRILLA DE TARJETAS #}
+                <div class="row g-4">
+                    {% for mascota in mascotas %}
+                        {# Usamos col-lg-3 para que entren 4 por fila, igual a la imagen #}
+                        <div class="col-md-6 col-lg-3">
+                            
+                            <div class="card h-100 shadow-sm text-center p-3" style="border-radius: 15px; border: 2px solid #e0e0e0;">
+                                
+                                {# Imagen #}
+                                <div style="aspect-ratio: 1/1; overflow: hidden; border-radius: 10px; margin-bottom: 15px;">
+                                    {# Si usas URL de internet en fixtures: #}
+                                    <img src="{{ mascota.imagen }}" alt="{{ mascota.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    {# Si usas archivos locales, recuerda usar asset() #}
+                                </div>
+
+                                {# Nombre #}
+                                <h5 class="fw-bold mb-2" style="color: #000;">{{ mascota.nombre }}</h5>
+
+                                {# Contador de Solicitudes #}
+                                <p class="text-muted small mb-3" style="font-size: 0.85rem;">
+                                    {{ mascota.solicitudes|length }} de Solicitudes
+                                </p>
+
+                                {# Botones de Acción #}
+                                <div class="d-flex justify-content-center gap-2">
+                                    
+                                    {# Botón Modificar (Sólido) #}
+                                    <a href="{{ path('app_admin_mascota_editar', {id: mascota.id}) }}" class="btn btn-sm text-white px-3" style="background-color: #0F5D3C; border-radius: 5px;">
+                                        Modificar
+                                    </a>
+
+                                    {# Botón Eliminar (Borde) #}
+                                    <a href="{{ path('app_admin_mascota_eliminar', {id: mascota.id}) }}" class="btn btn-sm px-3" style="background-color: white; border: 1px solid #0F5D3C; color: #0F5D3C; border-radius: 5px;" onclick="return confirm('¿Estás seguro de eliminar a {{ mascota.nombre }}? Esta acción no se puede deshacer.');">
+                                        Eliminar
+                                    </a>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    {% else %}
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted">No hay mascotas registradas aún.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

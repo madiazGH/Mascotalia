@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mascotas Solicitadas{% endblock %}
+
+{% block body %}
+    
+    <div style="background-color: #846355; min-height: 85vh; padding: 40px 0;">
+        <div class="container">
+            
+            {# CONTENEDOR BLANCO #}
+            <div class="bg-white shadow-lg" style="border-radius: 12px; padding: 40px; min-height: 80vh;">
+                
+                <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Mascotas Solicitadas</h2>
+
+                {# FILTROS (Visuales, para replicar imagen) #}
+                <div class="mb-4">
+                    <button class="btn btn-sm text-white me-2" style="background-color: #0F5D3C;">Filtros</button>
+                    <select class="form-select d-inline-block w-auto form-select-sm">
+                        <option>Ordenar por...</option>
+                    </select>
+                </div>
+
+                {# LISTA DE TARJETAS #}
+                <div class="row">
+                    <div class="col-12">
+                        
+                        {% for mascota in mascotas %}
+                            <div class="card mb-3 shadow-sm" style="border-radius: 15px; border: 2px solid #e0e0e0; overflow: hidden;">
+                                <div class="row g-0 align-items-center">
+                                    
+                                    {# Foto (Izquierda) #}
+                                    <div class="col-md-3 p-2">
+                                        <div style="aspect-ratio: 4/3; overflow: hidden; border-radius: 10px;">
+                                            <img src="{{ mascota.imagen }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                    </div>
+                                    
+                                    {# Datos (Centro/Derecha) #}
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <h3 class="fw-bold mb-1">{{ mascota.nombre }}</h3>
+                                            <p class="text-muted small mb-3">
+                                                N° de solicitudes: <strong>{{ mascota.solicitudes|length }}</strong>
+                                            </p>
+                                            
+                                            {# Botón Ver Solicitudes #}
+                                            <a href="{{ path('app_admin_ver_solicitudes', {id: mascota.id}) }}" 
+                                                class="btn btn-sm" 
+                                                style="background-color: #C6B6A8; color: #333; font-weight: bold;">
+                                                Ver Solicitudes
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-center text-muted mt-5">No hay solicitudes pendientes en este momento.</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
