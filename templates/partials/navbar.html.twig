@@ -51,7 +51,7 @@
                             Mi Cuenta
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_perfil') }}">Mi Perfil</a></li>
                             <li><hr class="dropdown-divider"></li>
                             {# El path 'app_logout' lo crearemos luego con security #}
                             <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Cerrar Sesión</a></li>
