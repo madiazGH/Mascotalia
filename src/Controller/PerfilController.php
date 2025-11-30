@@ -20,6 +20,33 @@ class PerfilController extends AbstractController
         /** @var Usuario $user */
         $user = $this->getUser(); // Obtenemos el usuario que está logueado
 
+        // Recibimos los datos
+            $nombre = $request->request->get('nombre');
+            $apellido = $request->request->get('apellido');
+            $provincia = $request->request->get('provincia');
+            $ciudad = $request->request->get('ciudad');
+            $direccion = $request->request->get('direccion'); // Este permite números y letras, no lo validamos
+            $telefono = $request->request->get('telefono');
+
+            // --- VALIDACIONES DE FORMATO ---
+            $soloLetras = "/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/";
+
+            if (!preg_match($soloLetras, $nombre) || !preg_match($soloLetras, $apellido)) {
+                $this->addFlash('error', 'El Nombre y Apellido solo pueden contener letras.');
+                return $this->redirectToRoute('app_perfil');
+            }
+
+            if (!preg_match($soloLetras, $provincia) || !preg_match($soloLetras, $ciudad)) {
+                $this->addFlash('error', 'La Provincia y Ciudad solo pueden contener letras.');
+                return $this->redirectToRoute('app_perfil');
+            }
+
+            if (!ctype_digit($telefono)) {
+                $this->addFlash('error', 'El teléfono solo debe contener números.');
+                return $this->redirectToRoute('app_perfil');
+            }
+            // -------------------------------
+
         // Si envían el formulario (POST)
         if ($request->isMethod('POST')) {
             

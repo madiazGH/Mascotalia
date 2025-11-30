@@ -30,11 +30,11 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Nombre</label>
-                                        <input type="text" class="form-control" name="nombre" placeholder="Nombre" style="padding: 10px;" required>
+                                        <input type="text" class="form-control" name="nombre" placeholder="Nombre" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')" required>
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Apellido</label>
-                                        <input type="text" class="form-control" name="apellido" placeholder="Apellido" style="padding: 10px;" required>
+                                        <input type="text" class="form-control" name="apellido" placeholder="Apellido" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')" required>
                                     </div>
                                 </div>
 
@@ -42,7 +42,7 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">DNI</label>
-                                        <input type="text" class="form-control" name="dni" placeholder="DNI" style="padding: 10px;" required>
+                                        <input type="text" class="form-control" name="dni" placeholder="DNI" style="padding: 10px;" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Fecha de Nacimiento</label>
@@ -55,11 +55,11 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Provincia</label>
-                                        <input type="text" class="form-control" name="provincia" placeholder="Provincia" style="padding: 10px;" required>
+                                        <input type="text" class="form-control" name="provincia" placeholder="Provincia" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')" required>
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Ciudad</label>
-                                        <input type="text" class="form-control" name="ciudad" placeholder="Ciudad" style="padding: 10px;" required>
+                                        <input type="text" class="form-control" name="ciudad" placeholder="Ciudad" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')" required>
                                     </div>
                                 </div>
 
@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Número de Teléfono</label>
-                                        <input type="text" class="form-control" name="telefono" placeholder="Teléfono" style="padding: 10px;" required>
+                                        <input type="text" class="form-control" name="telefono" placeholder="Teléfono" style="padding: 10px;" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                                     </div>
                                 </div>
 

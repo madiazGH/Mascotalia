@@ -44,6 +44,31 @@ class RegistroController extends AbstractController
                 return $this->render('registro/index.html.twig');
             }
 
+            // --- NUEVAS VALIDACIONES DE FORMATO ---
+
+            // 1. Validar Solo Letras (Nombre, Apellido, Provincia, Ciudad)
+            // La expresión regular permite: a-z, A-Z, ñ, tildes y espacios (\s)
+            $soloLetras = "/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/";
+
+            if (!preg_match($soloLetras, $nombre) || !preg_match($soloLetras, $apellido)) {
+                $this->addFlash('error', 'El Nombre y Apellido solo pueden contener letras.');
+                return $this->render('registro/index.html.twig');
+            }
+
+            if (!preg_match($soloLetras, $provincia) || !preg_match($soloLetras, $ciudad)) {
+                $this->addFlash('error', 'La Provincia y Ciudad solo pueden contener letras.');
+                return $this->render('registro/index.html.twig');
+            }
+
+            // 2. Validar Solo Números (Teléfono)
+            // ctype_digit verifica que todos los caracteres sean dígitos
+            if (!ctype_digit($telefono)) {
+                $this->addFlash('error', 'El teléfono solo debe contener números (sin guiones ni espacios).');
+                return $this->render('registro/index.html.twig');
+            }
+            
+            // --------------------------------------
+
             // --- NUEVA VALIDACIÓN DE COMPLEJIDAD ---
             // Explicación del Regex:
             // (?=.*[a-z]) -> Busca al menos una minúscula

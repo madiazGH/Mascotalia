@@ -26,11 +26,11 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Nombre</label>
-                                        <input type="text" class="form-control" name="nombre" value="{{ app.user.nombre }}" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="nombre" value="{{ app.user.nombre }}" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')">
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Apellido</label>
-                                        <input type="text" class="form-control" name="apellido" value="{{ app.user.apellido }}" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="apellido" value="{{ app.user.apellido }}" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')">
                                     </div>
                                 </div>
 
@@ -54,11 +54,11 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Provincia</label>
-                                        <input type="text" class="form-control" name="provincia" value="{{ app.user.provincia }}" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="provincia" value="{{ app.user.provincia }}" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')">
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Ciudad</label>
-                                        <input type="text" class="form-control" name="ciudad" value="{{ app.user.ciudad }}" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="ciudad" value="{{ app.user.ciudad }}" style="padding: 10px;" oninput="this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '')">
                                     </div>
                                 </div>
 
@@ -70,7 +70,7 @@
                                     </div>
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Numero de Teléfono</label>
-                                        <input type="text" class="form-control" name="telefono" value="{{ app.user.telefono }}" style="padding: 10px;">
+                                        <input type="text" class="form-control" name="telefono" value="{{ app.user.telefono }}" style="padding: 10px;" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                     </div>
                                 </div>
 

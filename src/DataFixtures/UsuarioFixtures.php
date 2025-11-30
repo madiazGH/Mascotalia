@@ -27,7 +27,7 @@ class UsuarioFixtures extends Fixture
         // Importante: No seteamos roles porque por defecto en la Entidad ya pusimos que agregue ROLE_USER
         
         // Encriptar password
-        $password = $this->hasher->hashPassword($user, '123456');
+        $password = $this->hasher->hashPassword($user, 'Cliente123');
         $user->setContraseña($password);
         
         $manager->persist($user);
@@ -35,7 +35,7 @@ class UsuarioFixtures extends Fixture
         // 2. Crear un ADMINISTRADOR
         $admin = new Usuario();
         $admin->setEmail('admin@mascotalia.com');
-        $admin->setNombre('Admin');
+        $admin->setNombre('Admin123');
         $admin->setApellido('Sistema');
         $admin->setRol(['ROLE_ADMIN']); // Aquí sí forzamos el rol
         
