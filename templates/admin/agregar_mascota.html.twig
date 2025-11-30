@@ -15,8 +15,7 @@
                             <h2 class="mb-4 text-center" style="color: #000; font-weight: bold;">Nueva Mascota</h2>
                             <p class="text-center text-muted mb-4">Ingresa los datos del nuevo integrante</p>
 
-                            <form action="{{ path('app_admin_mascota_agregar') }}" method="post">
-                                
+                            <form action="{{ path('app_admin_mascota_agregar') }}" method="post" enctype="multipart/form-data">                                
                                 {# Nombre y Especie #}
                                 <div class="row mb-3">
                                     <div class="col-md-6">
@@ -55,9 +54,9 @@
 
                                 {# URL Imagen #}
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small">URL de la Imagen</label>
-                                    <input type="text" class="form-control" name="imagen" placeholder="https://..." required>
-                                    <div class="form-text">Pega aquí el enlace de la foto.</div>
+                                    <label class="form-label text-muted small">Subir Foto</label>
+                                    {# Type file, aceptamos solo imagenes #}
+                                    <input type="file" class="form-control" name="imagen" accept="image/*" required>
                                 </div>
 
                                 {# Descripción #}

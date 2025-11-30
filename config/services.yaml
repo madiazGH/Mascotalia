@@ -5,6 +5,11 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
+parameters:
+    
+    # Ruta donde se guardarán las fotos de las mascotas
+    mascotas_directory: '%kernel.project_dir%/public/uploads/mascotas'
+
 services:
     # default configuration for services in *this* file
     _defaults:

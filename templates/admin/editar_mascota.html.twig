@@ -14,7 +14,7 @@
                             
                             <h2 class="mb-4 text-center" style="color: #000; font-weight: bold;">Editar Mascota</h2>
 
-                            <form action="{{ path('app_admin_mascota_editar', {id: mascota.id}) }}" method="post">
+                            <form action="{{ path('app_admin_mascota_editar', {id: mascota.id}) }}" method="post" enctype="multipart/form-data">
                                 
                                 {# Nombre y Especie #}
                                 <div class="row mb-3">
@@ -52,10 +52,11 @@
                                     </div>
                                 </div>
 
-                                {# URL Imagen #}
+                                {# Imagen #}
                                 <div class="mb-3">
-                                    <label class="form-label text-muted small">URL de la Imagen</label>
-                                    <input type="text" class="form-control" name="imagen" value="{{ mascota.imagen }}" required>
+                                    <label class="form-label text-muted small">Cambiar Foto (Dejar vacío para mantener actual)</label>
+                                    <input type="file" class="form-control" name="imagen" accept="image/*">
+                                    <div class="form-text">Foto actual: {{ mascota.imagen }}</div>
                                 </div>
 
                                 {# Descripción #}

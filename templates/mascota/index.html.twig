@@ -110,15 +110,10 @@
                             <div class="card h-100 border shadow-sm" style="border-radius: 12px; overflow: hidden;">
                                 
                                 <div style="height: 200px; overflow: hidden; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
-                                    {# IMAGEN:
-                                        Asumimos que en la base de datos guardaste el nombre del archivo (ej: "perro1.jpg")
-                                        o una URL completa.
-                                        Si guardaste URL completa (https://...), usa {{ mascota.imagen }} directo.
-                                        Si guardaste nombre de archivo, usa {{ asset('images/' ~ mascota.imagen) }}
-                                    #}
-                                    <img src="{{ mascota.imagen }}" 
-                                            alt="{{ mascota.nombre }}" 
-                                            style="width: 100%; height: 100%; object-fit: cover; padding: 15px; border-radius: 25px;">
+                                    
+                                    <img src="{{ asset('uploads/mascotas/' ~ mascota.imagen) }}" 
+                                        alt="{{ mascota.nombre }}" 
+                                        style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
 
                                 <div class="card-body text-center p-3">

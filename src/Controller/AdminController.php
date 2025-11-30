@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Component\String\Slugger\SluggerInterface; 
+use Symfony\Component\HttpFoundation\File\UploadedFile; 
 use App\Entity\Mascota;
 use App\Repository\SolicitudRepository; 
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,18 +51,25 @@ class AdminController extends AbstractController
     #[Route('/mascotas/editar/{id}', name: 'app_admin_mascota_editar')]
     public function editar(Mascota $mascota, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Si enviaron el formulario con cambios
         if ($request->isMethod('POST')) {
             
             $mascota->setNombre($request->request->get('nombre'));
             $mascota->setEspecie($request->request->get('especie'));
             $mascota->setEdad($request->request->get('edad'));
-            $mascota->setTamano($request->request->get('tamano')); // Cuidado con la Ñ en el name del HTML
+            $mascota->setTamano($request->request->get('tamano'));
             $mascota->setDescripcion($request->request->get('descripcion'));
-            $mascota->setImagen($request->request->get('imagen')); // Por ahora URL texto
+            
+            // MANEJO DE IMAGEN (Solo si subieron una nueva)
+            /** @var UploadedFile $archivo */
+            $archivo = $request->files->get('imagen');
+            
+            if ($archivo) {
+                // Si suben foto nueva, la procesamos y reemplazamos la vieja
+                $nombreArchivo = $this->subirImagen($archivo);
+                $mascota->setImagen($nombreArchivo);
+            }
+            // Si NO suben foto, no hacemos nada (se mantiene la que ya tenía)
 
-            // Manejo del Checkbox "Disponible"
-            // Si el checkbox no está marcado, $request->get devuelve null
             $disponible = $request->request->get('disponible') === 'on'; 
             $mascota->setDisponible($disponible);
 
@@ -98,35 +107,57 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin_mascotas');
     }
 
-    // --- 4. AGREGAR MASCOTA (ALTA) ---
+    // --- 4. AGREGAR MASCOTA ---
     #[Route('/mascotas/agregar', name: 'app_admin_mascota_agregar')]
     public function agregar(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Si enviaron el formulario (POST)
         if ($request->isMethod('POST')) {
-            
             $mascota = new Mascota();
             
-            // Seteamos los datos
+            // Datos normales
             $mascota->setNombre($request->request->get('nombre'));
             $mascota->setEspecie($request->request->get('especie'));
-            $mascota->setEdad((int)$request->request->get('edad'));
+            $mascota->setEdad($request->request->get('edad'));
             $mascota->setTamano($request->request->get('tamano'));
             $mascota->setDescripcion($request->request->get('descripcion'));
-            $mascota->setImagen($request->request->get('imagen'));
-
-            // RN2: Por defecto, una mascota nueva nace Disponible
-            // (A menos que quieras un checkbox en el alta, pero la regla dice automático)
             $mascota->setDisponible(true);
 
-            // Persistimos (Esto es vital porque es un objeto NUEVO)
+            // MANEJO DE IMAGEN (Archivo)
+            /** @var UploadedFile $archivo */
+            $archivo = $request->files->get('imagen'); // Usamos 'files' en vez de 'request'
+            
+            if ($archivo) {
+                $nombreArchivo = $this->subirImagen($archivo);
+                $mascota->setImagen($nombreArchivo); // Guardamos "perro123.jpg" en la BD
+            }
+
             $entityManager->persist($mascota);
             $entityManager->flush();
 
             $this->addFlash('success', 'Mascota agregada correctamente.');
             return $this->redirectToRoute('app_admin_mascotas');
         }
-
         return $this->render('admin/agregar_mascota.html.twig');
+    }
+
+    // --- FUNCIÓN PRIVADA PARA SUBIR IMÁGENES ---
+    // Esta función hace la magia de mover el archivo y renombrarlo
+    private function subirImagen(UploadedFile $file): string
+    {
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        // Generamos un nombre único para evitar duplicados (ej: "fido-65a4b3c.jpg")
+        $newFilename = uniqid().'.'.$file->guessExtension();
+
+        try {
+            $file->move(
+                $this->getParameter('mascotas_directory'), // Usamos el parámetro de services.yaml
+                $newFilename
+            );
+        } catch (\Exception $e) {
+            // Manejar error si no se puede mover
+            throw new \Exception('Error al subir la imagen');
+        }
+
+        return $newFilename;
     }
 }

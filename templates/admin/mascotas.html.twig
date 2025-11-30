@@ -60,9 +60,9 @@
                                 
                                 {# Imagen #}
                                 <div style="aspect-ratio: 1/1; overflow: hidden; border-radius: 10px; margin-bottom: 15px;">
-                                    {# Si usas URL de internet en fixtures: #}
-                                    <img src="{{ mascota.imagen }}" alt="{{ mascota.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
-                                    {# Si usas archivos locales, recuerda usar asset() #}
+                                    <img src="{{ asset('uploads/mascotas/' ~ mascota.imagen) }}" 
+                                        alt="{{ mascota.nombre }}" 
+                                        style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
 
                                 {# Nombre #}
