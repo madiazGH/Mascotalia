@@ -168,6 +168,6 @@ class MascotaRepository extends ServiceEntityRepository
                     break;
             }
 
-            return $qb->getQuery()->getResult();
+            return $qb->getQuery(); // Devuelve Query (BUENO para paginar)
         }
 }

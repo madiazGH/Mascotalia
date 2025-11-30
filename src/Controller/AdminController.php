@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Component\String\Slugger\SluggerInterface; 
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile; 
 use App\Entity\Mascota;
 use App\Repository\SolicitudRepository; 
@@ -20,22 +20,28 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AdminController extends AbstractController
 {
     #[Route('/mascotas', name: 'app_admin_mascotas')]
-    public function gestionarMascotas(MascotaRepository $mascotaRepository, Request $request): Response
+    public function gestionarMascotas(MascotaRepository $mascotaRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        // 1. Capturar filtros
+        // 1. Capturar filtros (Igual)
         $especie = $request->query->get('especie');
         $tamano = $request->query->get('tamano');
         $edad = $request->query->get('edad');
-        $estado = $request->query->get('estado'); // "1" o "0"
+        $estado = $request->query->get('estado');
         $orden = $request->query->get('orden');
 
-        // 2. Buscar
-        $mascotas = $mascotaRepository->buscarParaAdmin($especie, $tamano, $edad, $estado, $orden);
+        // 2. Obtener Query
+        $query = $mascotaRepository->buscarParaAdmin($especie, $tamano, $edad, $estado, $orden);
+
+        // 3. PAGINAR
+        $mascotas = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10 // Para admin, listas de 10 o 20 suelen ser mejores
+        );
 
         return $this->render('admin/mascotas.html.twig', [
             'mascotas' => $mascotas,
-            // Enviamos los filtros de vuelta para mantener los selects marcados
-            'filtros' => [
+            'filtros' => [ 
                 'especie' => $especie,
                 'tamano' => $tamano,
                 'edad' => $edad,

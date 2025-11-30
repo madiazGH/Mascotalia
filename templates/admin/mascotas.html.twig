@@ -97,6 +97,11 @@
                     {% endfor %}
                 </div>
 
+                {# --- PAGINACIÓN --- #}
+                <div class="d-flex justify-content-center mt-5">
+                    {{ knp_pagination_render(mascotas) }}
+                </div>
+
             </div>
         </div>
         <div class="modal fade" id="modalAdminFiltros" tabindex="-1" aria-hidden="true">
