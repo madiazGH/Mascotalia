@@ -151,6 +151,11 @@ body {
     font-size: 1.2rem;
 }
 
+.home-texto {
+    color: var(--color-texto-base);
+    font-size: 1.1rem;
+}
+
 /* --- FOOTER --- */
 .footer-custom {
     background-color: var(--color-fondo-basico);
