@@ -9,7 +9,6 @@
             &nbsp;Mascotalia
         </a>
 
-      
 
         <div class="collapse navbar-collapse" id="navbarContent">
             
@@ -39,8 +38,16 @@
 
             {# --- 3. BOTONES DERECHA (Login/Registro vs Perfil/Salir) --- #}
             <div class="d-flex gap-2 align-items-center">
+
+                {% if is_granted('ROLE_ADMIN') %}
+                        {# ESTADO: LOGUEADO (Sea Admin o Cliente) #}
+
+                        {# Botón de cerrar sesión del admin #}
+                        <button class="btn btn-outline-danger-custom" type="button" href="{{ path('app_logout') }}">
+                            Cerrar Sesión
+                        </button>
                 
-                {% if app.user %}
+                {% elseif app.user %}
                     {# ESTADO: LOGUEADO (Sea Admin o Cliente) #}
 
                     {# Dropdown o Botones de Usuario #}

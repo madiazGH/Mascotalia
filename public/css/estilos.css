@@ -11,6 +11,7 @@
     --color-texto-base: #522E1E;
     --color-texto-secundario: #846355;
     --color-texto-oscuro: #250D03;
+    --color-boton-rojo: #dc3545;
 }
 
 body {
@@ -61,6 +62,15 @@ body {
     text-decoration: none;
 }
 
+.btn-outline-danger-custom {
+    border: 2px solid var(--color-boton-rojo);
+    color: var(--color-boton-rojo);
+    font-weight: bold;
+    padding: 5px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
 .btn-filled-custom {
     background-color: var(--color-boton-select);
     color: white;
@@ -74,6 +84,12 @@ body {
 .btn-filled-custom:hover, .btn-outline-custom:hover {
     background-color: var(--color-boton);
     border-color: var(--color-boton);
+    color: white;
+}
+
+.btn-outline-danger-custom:hover {
+    background-color: var(--color-boton-rojo);
+    border-color: var(--color-boton-rojo);
     color: white;
 }
 
