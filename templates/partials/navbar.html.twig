@@ -43,9 +43,7 @@
                         {# ESTADO: LOGUEADO (Sea Admin o Cliente) #}
 
                         {# Botón de cerrar sesión del admin #}
-                        <button class="btn btn-outline-danger-custom" type="button" href="{{ path('app_logout') }}">
-                            Cerrar Sesión
-                        </button>
+                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger-custom">Cerrar Sesión</a>
                 
                 {% elseif app.user %}
                     {# ESTADO: LOGUEADO (Sea Admin o Cliente) #}
