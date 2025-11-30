@@ -162,3 +162,13 @@ body {
     color: var(--color-texto-secundario);
     font-size: 0.9rem;
 }
+
+.logo_ies {
+    width: 180px;
+    height: 80px;
+}
+
+.icono_telefono, .icono_email {
+    width: 20px;
+    height: 20px;
+}

@@ -41,8 +41,30 @@
 
         <footer class="footer-custom">
             <div class="container d-flex justify-content-between align-items-center">
-                <span class="footer-text">© 2025 IES de Santa Fe</span>
-                
+                <div class="d-flex align-items-center">
+                    <img class="logo_ies" src="{{ asset('imagenes/logo-IES-negro.png') }}" alt="logo_ies">
+                    <div class="d-flex align-items-center">
+
+                        {# Barrita #}
+                        <div class="vr mx-3" style="height:50px; width:2px;"></div>
+                        <div class="d-flex align-items-center gap-4" style="font-weight: 500; font-size: 0.95rem;">
+
+                            {# Grupo Teléfono #}
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ asset('imagenes/icono_telefono.png') }}" alt="Tel" style="height: 18px; width: auto;">
+                                <span style="color: #000;">+54 342 444-9948</span>
+                            </div>
+
+                            {# Grupo Email #}
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ asset('imagenes/icono_email.png') }}" alt="Email" style="height: 16px; width: auto; margin-top: 2px;">
+                                <span style="color: #000;">mascotalia@gmail.com</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
                 <a class="brand-text" href="#" style="font-size: 1.2rem;">
                     <img class="logo_mascotalia" src="{{ asset('imagenes/logo_mascotalia.png') }}" alt="logo_mascotalia">
                     &nbsp;Mascotalia
