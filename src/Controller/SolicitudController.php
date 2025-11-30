@@ -38,6 +38,15 @@ class SolicitudController extends AbstractController
         /** @var Usuario $usuario */
         $usuario = $this->getUser();
 
+        // --- VALIDACIÓN DE SEGURIDAD: Bloquear al Administrador ---
+        // Verificamos si el usuario tiene el rol de Admin en su lista
+        if (in_array('ROLE_ADMIN', $usuario->getRoles())) {
+                        
+            // Lo redirigimos a su panel de gestión para que no se quede en el limbo
+            return $this->redirectToRoute('app_admin_mascotas');
+        }
+        // ----------------------------------------------------------
+
         // 1. Validar límite (RN3)
         $cantidadActivas = $solicitudRepository->count([
             'usuario' => $usuario,
