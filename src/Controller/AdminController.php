@@ -36,7 +36,7 @@ class AdminController extends AbstractController
         $mascotas = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            10 // Para admin, listas de 10 o 20 suelen ser mejores
+            12 // Para admin, listas de 10 o 20 suelen ser mejores
         );
 
         return $this->render('admin/mascotas.html.twig', [
