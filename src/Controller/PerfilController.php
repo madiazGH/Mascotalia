@@ -37,6 +37,14 @@ class PerfilController extends AbstractController
             $repeatPassword = $request->request->get('password_repeat');
 
             if (!empty($newPassword)) {
+
+                // --- AGREGAMOS LA VALIDACIÓN AQUÍ TAMBIÉN ---
+                if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $newPassword)) {
+                    $this->addFlash('error', 'La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+                    // IMPORTANTE: Redirigimos al mismo lugar para no guardar nada
+                    return $this->redirectToRoute('app_perfil');
+                }
+                
                 if ($newPassword === $repeatPassword) {
                     $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
                     $user->setContraseña($hashedPassword);

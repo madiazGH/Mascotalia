@@ -44,6 +44,18 @@ class RegistroController extends AbstractController
                 return $this->render('registro/index.html.twig');
             }
 
+            // --- NUEVA VALIDACIÓN DE COMPLEJIDAD ---
+            // Explicación del Regex:
+            // (?=.*[a-z]) -> Busca al menos una minúscula
+            // (?=.*[A-Z]) -> Busca al menos una mayúscula
+            // (?=.*\d)    -> Busca al menos un número
+            // .{8,}       -> Que tenga 8 o más caracteres en total
+            if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
+                $this->addFlash('error', 'La contraseña es muy débil. Debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+                return $this->render('registro/index.html.twig');
+            }
+            // ---------------------------------------
+
             // 3. VALIDACIÓN DE CONTRASEÑAS
             if ($password !== $passwordRepeat) {
                 $this->addFlash('error', 'Las contraseñas no coinciden.');

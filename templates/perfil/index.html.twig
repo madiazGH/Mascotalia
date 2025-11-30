@@ -86,7 +86,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Contraseña</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" name="password" placeholder="Ingresa nueva contraseña (opcional)" style="padding: 10px; border-right: 0;">
+                                            <input type="password" class="form-control" name="password" placeholder="Ingresa nueva contraseña (opcional)" style="padding: 10px; border-right: 0;" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Debe contener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y números">
                                             {# CAMBIO IMPORTANTE: Usamos un <button> con la clase 'btn-toggle-password' #}
                                             <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border-top-0 btn-toggle-password" type="button">
                                                 {# Ícono por defecto: Ojo Tachado (Slash) #}
@@ -100,7 +100,7 @@
                                     <div class="col-md-6 mt-3 mt-md-0">
                                         <label class="form-label" style="font-size: 0.85rem; color: #888;">Repetir Contraseña</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" name="password_repeat" placeholder="Repite la contraseña" style="padding: 10px; border-right: 0;">
+                                            <input type="password" class="form-control" name="password_repeat" placeholder="Repite la contraseña" style="padding: 10px; border-right: 0;" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Debe contener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y números">
                                             {# CAMBIO IMPORTANTE: Usamos un <button> con la clase 'btn-toggle-password' #}
                                             <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border-top-0 btn-toggle-password" type="button">
                                                 {# Ícono por defecto: Ojo Tachado (Slash) #}
