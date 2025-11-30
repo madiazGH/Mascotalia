@@ -96,6 +96,11 @@
                     <p class="text-center">No hay solicitudes para esta mascota.</p>
                 {% endfor %}
 
+                {# --- PAGINACIÓN --- #}
+                <div class="d-flex justify-content-center mt-4">
+                    {{ knp_pagination_render(solicitudes) }}
+                </div>
+
                 <div class="mt-4">
                     <a href="{{ path('app_admin_solicitudes') }}" class="text-muted text-decoration-none">← Volver al listado</a>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Mascota;
 use App\Entity\Solicitud;
 use App\Repository\MascotaRepository;
@@ -18,34 +19,47 @@ class AdminSolicitudController extends AbstractController
 {
     // PANTALLA 1: LISTA DE MASCOTAS SOLICITADAS
     #[Route('/', name: 'app_admin_solicitudes')]
-    public function index(MascotaRepository $mascotaRepo, Request $request): Response
+    public function index(MascotaRepository $mascotaRepo, Request $request, PaginatorInterface $paginator): Response
     {
         $especie = $request->query->get('especie');
         $tamano = $request->query->get('tamano');
-        
-        // 1. Capturar orden
         $orden = $request->query->get('orden');
 
-        // 2. Pasar al repo
-        $mascotas = $mascotaRepo->buscarSolicitadasConFiltros($especie, $tamano, $orden);
+        // 1. Obtenemos la Query
+        $query = $mascotaRepo->buscarSolicitadasConFiltros($especie, $tamano, $orden);
+
+        // 2. Paginamos
+        $mascotas = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10 // Límite por página (ajústalo si quieres probar con menos)
+        );
 
         return $this->render('admin_solicitud/index.html.twig', [
             'mascotas' => $mascotas,
             'filtros' => [
                 'especie' => $especie, 
-                'tamano' => $tamano,
-                'orden' => $orden // 3. Devolver a la vista
+                'tamano' => $tamano, 
+                'orden' => $orden
             ]
         ]);
     }
 
     // PANTALLA 2: VER SOLICITUDES DE UNA MASCOTA ESPECÍFICA
     #[Route('/ver/{id}', name: 'app_admin_ver_solicitudes')]
-    public function verSolicitudes(Mascota $mascota): Response
+    public function verSolicitudes(Mascota $mascota, PaginatorInterface $paginator, Request $request): Response
     {
+        // Paginamos la colección de solicitudes directamente
+        // KnpPaginator es tan bueno que sabe paginar Arrays y Colecciones de Doctrine también
+        $solicitudes = $paginator->paginate(
+            $mascota->getSolicitudes(), // La lista completa
+            $request->query->getInt('page', 1),
+            10 // Ponemos 5 por página para que sea fácil probar la paginación
+        );
+
         return $this->render('admin_solicitud/ver.html.twig', [
             'mascota' => $mascota,
-            'solicitudes' => $mascota->getSolicitudes(),
+            'solicitudes' => $solicitudes, // Pasamos la versión paginada
         ]);
     }
 
