@@ -23,6 +23,10 @@ class UsuarioFixtures extends Fixture
         $user->setEmail('cliente@mascotalia.com');
         $user->setNombre('Juan');
         $user->setApellido('Pérez');
+        $user->setDni('46448964');
+        $user->setProvincia('Chaco');
+        $user->setCiudad('Resistencia');
+        $user->setDireccion('Pje Mantaras 2580');
         $user->setRol(['ROLE_USER']);
         // Importante: No seteamos roles porque por defecto en la Entidad ya pusimos que agregue ROLE_USER
         
@@ -39,7 +43,7 @@ class UsuarioFixtures extends Fixture
         $admin->setApellido('Sistema');
         $admin->setRol(['ROLE_ADMIN']); // Aquí sí forzamos el rol
         
-        $passwordAdmin = $this->hasher->hashPassword($admin, 'admin');
+        $passwordAdmin = $this->hasher->hashPassword($admin, 'Admin123');
         $admin->setContraseña($passwordAdmin);
 
         $manager->persist($admin);
