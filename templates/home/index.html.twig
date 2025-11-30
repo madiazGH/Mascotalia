@@ -5,36 +5,65 @@
 {% block body %}
 
     {# HERO SECTION #}
-    <section class="hero-section">
-        <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e" alt="Perro y gato" class="hero-image">
-        <h1 class="hero-text">ADOPTÁ TU NUEVO MEJOR AMIGO</h1>
+    <section class="hero-section position-relative">
+        <img src="{{ asset('imagenes/banner.jpg') }}" alt="Perro y gato" class="hero-image">
+        
+        {# Ajuste: Cambiamos el texto para que coincida con la imagen de referencia #}
+        {# Antes decía ADOPTÁ TU NUEVO..., ahora dice QUIERO ADOPTAR #}
+            <h1 class="hero-text">ADOPTÁ TU NUEVO MEJOR AMIGO</h1>
     </section>
 
-    {# CATEGORÍAS #}
-    <div class="container mt-5 mb-5">
+    {# --- NUEVA SECCIÓN: ANTES DE ADOPTAR --- #}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                
+                <h2 class="fw-bold mb-3">ANTES DE ADOPTAR</h2>
+                
+                <h5 class="fw-bold mb-4">Adoptá con conciencia y corazón.</h5>
+                
+                <p class="text-muted mb-4" style="line-height: 1.6;">
+                    Al pensar en adoptar, es crucial tener en cuenta diversos factores para garantizar una convivencia armoniosa. 
+                    Evalúa el espacio disponible en tu hogar, el tiempo que puedes dedicar al juego y paseo, así como los 
+                    costos asociados con la alimentación, atención veterinaria y cuidado durante las vacaciones. Asegúrate de 
+                    que tu elección de mascota se ajuste a tu estilo de vida y a la cantidad de tiempo que puedes comprometer.
+                </p>
+                
+                <p class="text-muted mb-5" style="line-height: 1.6;">
+                    Es importante recordar que un animal de compañía puede tener una vida promedio de entre 14 y 18 años, 
+                    y durante todo ese tiempo dependerá de vos. Adoptar implica asumir la responsabilidad de su bienestar 
+                    y felicidad a lo largo de su vida.
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    {# CATEGORÍAS (Círculos) #}
+    <div class="container mb-5">
         <div class="row text-center">
             
-            <div class="col-3 category-card">
-                <img src="https://images.unsplash.com/photo-1591160690555-5debfba289f0?w=500&auto=format&fit=crop&q=60" alt="Cachorro" class="category-img">
-                <h3 class="category-title">Cachorro</h3>
+            <div class="col-6 col-md-3 mb-4 category-card">
+                <img src="{{ asset('imagenes/cachorro.jpg') }}" alt="Cachorro" class="category-img">
+                <h3 class="category-title mt-2">Cachorro</h3>
                 <p class="category-subtitle">Menos de 1 año</p>
             </div>
 
-            <div class="col-3 category-card">
-                <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=500&auto=format&fit=crop&q=60" alt="Joven" class="category-img">
-                <h3 class="category-title">Joven</h3>
+            <div class="col-6 col-md-3 mb-4 category-card">
+                <img src="{{ asset('imagenes/joven.jpg') }}" alt="Joven" class="category-img">
+                <h3 class="category-title mt-2">Joven</h3>
                 <p class="category-subtitle">1-5 años</p>
             </div>
 
-            <div class="col-3 category-card">
-                <img src="https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZG9nfGVufDB8fDB8fHww" alt="Adulto" class="category-img">
-                <h3 class="category-title">Adulto</h3>
+            <div class="col-6 col-md-3 mb-4 category-card">
+                <img src="{{ asset('imagenes/adulto.jpg') }}" alt="Adulto" class="category-img">
+                <h3 class="category-title mt-2">Adulto</h3>
                 <p class="category-subtitle">5-9 años</p>
             </div>
 
-            <div class="col-3 category-card">
-                <img src="https://images.unsplash.com/photo-1607867062231-89acdc79a5e0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8b2xkJTIwZG9nfGVufDB8fDB8fHww" alt="Abuelo" class="category-img">
-                <h3 class="category-title">Abuelo</h3>
+            <div class="col-6 col-md-3 mb-4 category-card">
+                <img src="{{ asset('imagenes/abuelo.jpg') }}" alt="Abuelo" class="category-img">
+                <h3 class="category-title mt-2">Abuelo</h3>
                 <p class="category-subtitle">+ de 10 años</p>
             </div>
 
