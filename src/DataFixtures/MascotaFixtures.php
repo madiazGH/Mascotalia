@@ -11,23 +11,41 @@ class MascotaFixtures extends Fixture
     {
         $edades = ['Cachorro', 'Joven', 'Adulto', 'Abuelo'];
         $tamanos = ['Pequeño', 'Mediano', 'Grande'];
-        $especies = ['Perro', 'Gato'];
-        $imagenesPrueba = ['perro1.jpg', 'gato1.jpg', 'perro2.jpg'];
+        $imagenesPruebaPerro = ['perro1.jpg', 'perro2.jpg', 'perro3.jpg', 'perro4.jpg', 'perro5.jpg', 'perro6.jpg'];
+        $imagenesPruebaGato = ['gato1.jpg', 'gato2.jpg', 'gato3.jpg', 'gato4.jpg'];
 
-        for ($i = 1; $i < 11; $i++) {
-            $mascota = new Mascota();
-            $mascota->setNombre('Mascota ' . $i);
+        // Fixture para 6 perros
+        for ($i = 1; $i < 7; $i++) {
+            $mascotaPerro = new Mascota();
+            $mascotaPerro->setNombre('Perro ' . $i);
             
             // Elegimos valores al azar de los arrays
-            $mascota->setEspecie($especies[array_rand($especies)]);
-            $mascota->setEdad($edades[array_rand($edades)]); 
-            $mascota->setTamano($tamanos[array_rand($tamanos)]);
+            $mascotaPerro->setEspecie('Perro');
+            $mascotaPerro->setEdad($edades[array_rand($edades)]); 
+            $mascotaPerro->setTamano($tamanos[array_rand($tamanos)]);
             
             // ... resto del código (imagen, descripcion, etc) ...
-            $mascota->setDescripcion('Descripción de prueba...');
-            $mascota->setImagen($imagenesPrueba[array_rand($imagenesPrueba)]);            
-            $mascota->setDisponible(true);
-            $manager->persist($mascota);
+            $mascotaPerro->setDescripcion('Descripción de prueba...');
+            $mascotaPerro->setImagen('perro'.$i.'.jpg');            
+            $mascotaPerro->setDisponible(true);
+            $manager->persist($mascotaPerro);
+        }
+
+        // Fixture para 4 gatos
+        for ($i = 1; $i < 5; $i++) {
+            $mascotaGato = new Mascota();
+            $mascotaGato->setNombre('Gato ' . $i);
+            
+            // Elegimos valores al azar de los arrays
+            $mascotaGato->setEspecie('Gato');
+            $mascotaGato->setEdad($edades[array_rand($edades)]); 
+            $mascotaGato->setTamano($tamanos[array_rand($tamanos)]);
+            
+            // ... resto del código (imagen, descripcion, etc) ...
+            $mascotaGato->setDescripcion('Descripción de prueba...');
+            $mascotaGato->setImagen('gato'.$i.'.jpg');            
+            $mascotaGato->setDisponible(true);
+            $manager->persist($mascotaGato);
         }
         $manager->flush();
     }
