@@ -11,7 +11,7 @@
                 
                 {# Título #}
                 <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">
-                    Solicitudes de [{{ mascota.nombre }}]
+                    Solicitudes de {{ mascota.nombre }}
                 </h2>
 
                 {# LISTA DE SOLICITUDES #}
@@ -101,9 +101,7 @@
                     {{ knp_pagination_render(solicitudes) }}
                 </div>
 
-                <div class="mt-4">
-                    <a href="{{ path('app_admin_solicitudes') }}" class="text-muted text-decoration-none">← Volver al listado</a>
-                </div>
+                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_admin_solicitudes') }}">Volver al listado</a>
 
             </div>
         </div>
