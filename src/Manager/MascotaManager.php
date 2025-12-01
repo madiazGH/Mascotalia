@@ -64,14 +64,14 @@ class MascotaManager
      */
     private function borrarArchivoFisico(?string $nombreArchivo): void
     {
-        // Solo borramos si tiene nombre y NO es una URL de internet
-        if ($nombreArchivo && !str_contains($nombreArchivo, 'http')) {
+        // Solo verificamos que el nombre no sea nulo o vacío
+        if ($nombreArchivo) {
             
             $directorio = $this->params->get('mascotas_directory');
             $rutaCompleta = $directorio . '/' . $nombreArchivo;
 
             if (file_exists($rutaCompleta)) {
-                unlink($rutaCompleta);
+                unlink($rutaCompleta); // Borra el archivo
             }
         }
     }
