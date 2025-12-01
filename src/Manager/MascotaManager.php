@@ -12,7 +12,6 @@ class MascotaManager
     private EntityManagerInterface $entityManager;
     private ParameterBagInterface $params;
 
-    // Inyecto los servicios que necesito: BD y Parámetros (para saber la ruta de uploads)
     public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $params)
     {
         $this->entityManager = $entityManager;
@@ -20,69 +19,76 @@ class MascotaManager
     }
 
     /**
-     * Guarda una mascota (Nueva o Editada) y maneja la foto si viene una.
+     * Guarda una mascota (Alta o Edición)
      */
     public function guardar(Mascota $mascota, ?UploadedFile $foto): void
     {
-        // 1. Si me mandaron una foto, la proceso
+        // 1. Si hay foto nueva, procesamos el cambio
         if ($foto) {
+            
+            // A) Primero borramos la vieja (si existe) para no dejar basura
+            $fotoVieja = $mascota->getImagen();
+            if ($fotoVieja) {
+                $this->borrarArchivoFisico($fotoVieja);
+            }
+
+            // B) Subimos la nueva
             $nuevoNombre = $this->subirFoto($foto);
             $mascota->setImagen($nuevoNombre);
         }
 
-        // 2. Si es una mascota nueva (no tiene ID), la pongo disponible por defecto (RN2)
+        // 2. Si es nueva, disponible por defecto
         if ($mascota->getId() === null) {
             $mascota->setDisponible(true);
         }
 
-        // 3. Guardo en la base de datos
+        // 3. Persistir
         $this->entityManager->persist($mascota);
         $this->entityManager->flush();
     }
 
-    
     /**
-     * Elimina una mascota y su foto asociada del disco.
+     * Elimina mascota y su foto
      */
     public function eliminar(Mascota $mascota): void
     {
-        // 1. Obtener el nombre del archivo guardado en la BD
-        $nombreArchivo = $mascota->getImagen();
+        // Borramos la foto antes de borrar el registro
+        $this->borrarArchivoFisico($mascota->getImagen());
 
-        if ($nombreArchivo) {
-            // Construir la ruta completa al archivo
-            // Usamos el parámetro que definimos en services.yaml
-            $directorio = $this->params->get('mascotas_directory');
-            $rutaCompleta = $directorio . '/' . $nombreArchivo;
-
-            // 2. Verificar si el archivo existe físicamente y borrarlo
-            if (file_exists($rutaCompleta) && is_file($rutaCompleta)) {
-                unlink($rutaCompleta); // Esta función elimina el archivo del disco
-            }
-        }
-
-        // 3. Borrar la entidad de la base de datos
-        // (Gracias al cascade=['remove'] que pusimos antes, también borrará las solicitudes)
         $this->entityManager->remove($mascota);
         $this->entityManager->flush();
     }
 
     /**
-     * Lógica privada para mover el archivo
+     * Lógica privada para borrar archivos del disco
+     */
+    private function borrarArchivoFisico(?string $nombreArchivo): void
+    {
+        // Solo borramos si tiene nombre y NO es una URL de internet
+        if ($nombreArchivo && !str_contains($nombreArchivo, 'http')) {
+            
+            $directorio = $this->params->get('mascotas_directory');
+            $rutaCompleta = $directorio . '/' . $nombreArchivo;
+
+            if (file_exists($rutaCompleta)) {
+                unlink($rutaCompleta);
+            }
+        }
+    }
+
+    /**
+     * Lógica privada para subir archivos
      */
     private function subirFoto(UploadedFile $file): string
     {
-        // Genero nombre único
         $newFilename = uniqid() . '.' . $file->guessExtension();
 
         try {
-            // Muevo el archivo a la carpeta configurada en services.yaml
             $file->move(
                 $this->params->get('mascotas_directory'),
                 $newFilename
             );
         } catch (\Exception $e) {
-            // Si falla, lanzo error para que el controller se entere
             throw new \Exception('Error al subir la imagen');
         }
 
