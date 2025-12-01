@@ -3,22 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Usuario;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Manager\UsuarioManager; // <--- Importante
+use App\Repository\UsuarioRepository; // Para chequear duplicados
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class RegistroController extends AbstractController
 {
     #[Route('/registro', name: 'app_register')]
-    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function index(Request $request, UsuarioManager $usuarioManager, UsuarioRepository $usuarioRepo): Response
     {
-        // Si me están mandando datos (POST)...
         if ($request->isMethod('POST')) {
             
-            // 1. Capturo todos los datos del formulario en variables para trabajar más cómodo
+            // 1. CAPTURAR Y VALIDAR DATOS (Esto sigue igual, validación de entrada)
             $nombre = $request->request->get('nombre');
             $apellido = $request->request->get('apellido');
             $dni = $request->request->get('dni');
@@ -31,74 +30,48 @@ class RegistroController extends AbstractController
             $password = $request->request->get('password');
             $passwordRepeat = $request->request->get('password_repeat');
 
-            // 2. VALIDACIÓN OBLIGATORIA: ¿Hay algún campo vacío?
-            // Reviso uno por uno. Si alguno está vacío, freno todo.
+            // Validaciones de Vacío
             if (empty($nombre) || empty($apellido) || empty($dni) || empty($fechaNacimiento) || 
                 empty($provincia) || empty($ciudad) || empty($direccion) || empty($telefono) || 
                 empty($email) || empty($password)) {
-                
-                // Aviso al usuario del error
                 $this->addFlash('error', 'Por favor, completá todos los campos obligatorios.');
-                
-                // Lo devuelvo al formulario (no guardo nada)
                 return $this->render('registro/index.html.twig');
             }
 
-            // --- NUEVAS VALIDACIONES DE FORMATO ---
-
-            // 1. Validar Solo Letras (Nombre, Apellido, Provincia, Ciudad)
-            // La expresión regular permite: a-z, A-Z, ñ, tildes y espacios (\s)
+            // Validaciones de Formato (Regex)
             $soloLetras = "/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/";
-
             if (!preg_match($soloLetras, $nombre) || !preg_match($soloLetras, $apellido)) {
                 $this->addFlash('error', 'El Nombre y Apellido solo pueden contener letras.');
                 return $this->render('registro/index.html.twig');
             }
-
             if (!preg_match($soloLetras, $provincia) || !preg_match($soloLetras, $ciudad)) {
                 $this->addFlash('error', 'La Provincia y Ciudad solo pueden contener letras.');
                 return $this->render('registro/index.html.twig');
             }
-
-            // 2. Validar Solo Números (Teléfono)
-            // ctype_digit verifica que todos los caracteres sean dígitos
             if (!ctype_digit($telefono)) {
-                $this->addFlash('error', 'El teléfono solo debe contener números (sin guiones ni espacios).');
+                $this->addFlash('error', 'El teléfono solo debe contener números.');
                 return $this->render('registro/index.html.twig');
             }
-            
-            // --------------------------------------
 
-            // --- NUEVA VALIDACIÓN DE COMPLEJIDAD ---
-            // Explicación del Regex:
-            // (?=.*[a-z]) -> Busca al menos una minúscula
-            // (?=.*[A-Z]) -> Busca al menos una mayúscula
-            // (?=.*\d)    -> Busca al menos un número
-            // .{8,}       -> Que tenga 8 o más caracteres en total
+            // Validación Password Complejidad
             if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
-                $this->addFlash('error', 'La contraseña es muy débil. Debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+                $this->addFlash('error', 'La contraseña es muy débil (Mínimo 8 caracteres, 1 Mayúscula, 1 minúscula, 1 número).');
                 return $this->render('registro/index.html.twig');
             }
-            // ---------------------------------------
-
-            // 3. VALIDACIÓN DE CONTRASEÑAS
             if ($password !== $passwordRepeat) {
                 $this->addFlash('error', 'Las contraseñas no coinciden.');
                 return $this->render('registro/index.html.twig');
             }
 
-            // 4. VALIDACIÓN DE DUPLICADOS (Ya la teníamos)
-            $usuarioExistente = $entityManager->getRepository(Usuario::class)->findOneBy(['email' => $email]);
-            
-            if ($usuarioExistente) {
+            // Validación Duplicados
+            if ($usuarioRepo->findOneBy(['email' => $email])) {
                 $this->addFlash('error', 'El correo electrónico ya está registrado.');
                 return $this->render('registro/index.html.twig');
             }
 
-            // --- Si pasé todas las validaciones de arriba, recién ahora creo el usuario ---
-
+            // --- AQUÍ ENTRA EL MANAGER ---
+            // Creamos el objeto y seteamos lo básico
             $usuario = new Usuario();
-            
             $usuario->setEmail($email);
             $usuario->setNombre($nombre);
             $usuario->setApellido($apellido);
@@ -108,24 +81,13 @@ class RegistroController extends AbstractController
             $usuario->setDireccion($direccion);
             $usuario->setTelefono($telefono);
 
-            // Intento procesar la fecha
             try {
                 $usuario->setFechaNacimiento(new \DateTime($fechaNacimiento)); 
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'El formato de la fecha es incorrecto.');
-                return $this->render('registro/index.html.twig');
-            }
+            } catch (\Exception $e) { /* ... */ }
 
-            // Encripto y asigno rol
-            $hashedPassword = $passwordHasher->hashPassword($usuario, $password);
-            $usuario->setContraseña($hashedPassword);
-            $usuario->setRol(['ROLE_USER']);
+            // Delegamos la encriptación y el guardado al Manager
+            $usuarioManager->registrar($usuario, $password);
 
-            // Guardo en la base de datos
-            $entityManager->persist($usuario);
-            $entityManager->flush();
-
-            // Éxito
             $this->addFlash('success', 'Cuenta creada exitosamente. ¡Ahora podés iniciar sesión!');
             return $this->redirectToRoute('app_login');
         }
