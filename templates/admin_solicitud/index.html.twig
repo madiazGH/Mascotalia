@@ -12,7 +12,7 @@
                 
                 <h2 class="text-center mb-5" style="color: #000; font-weight: bold;">Mascotas Solicitadas</h2>
 
-                {# FILTROS (Visuales, para replicar imagen) #}
+                {# FILTROS #}
                 <div class="mb-4">
                     <button class="btn btn-sm text-white me-2" 
                             style="background-color: #0F5D3C;"
@@ -82,50 +82,51 @@
                     </div>
                 </div>
 
-                {# --- PAGINACIÓN --- #}
+                {# PAGINACIÓN #}
                 <div class="d-flex justify-content-center mt-5">
                     {{ knp_pagination_render(mascotas) }}
                 </div>
 
             </div>
         </div>
+        {# FILTROS (Parte interactuable) #}
         <div class="modal fade" id="modalSolicitudesFiltro" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">Filtrar Solicitudes</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ path('app_admin_solicitudes') }}" method="get">
-                    
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Especie</label>
-                        <select class="form-select" name="especie">
-                            <option value="">Todas</option>
-                            <option value="Perro" {{ filtros.especie == 'Perro' ? 'selected' : '' }}>Perro</option>
-                            <option value="Gato" {{ filtros.especie == 'Gato' ? 'selected' : '' }}>Gato</option>
-                        </select>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Filtrar Solicitudes</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                        <form action="{{ path('app_admin_solicitudes') }}" method="get">
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Especie</label>
+                                <select class="form-select" name="especie">
+                                    <option value="">Todas</option>
+                                    <option value="Perro" {{ filtros.especie == 'Perro' ? 'selected' : '' }}>Perro</option>
+                                    <option value="Gato" {{ filtros.especie == 'Gato' ? 'selected' : '' }}>Gato</option>
+                                </select>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Tamaño</label>
-                        <select class="form-select" name="tamano">
-                            <option value="">Todos</option>
-                            <option value="Pequeño" {{ filtros.tamano == 'Pequeño' ? 'selected' : '' }}>Pequeño</option>
-                            <option value="Mediano" {{ filtros.tamano == 'Mediano' ? 'selected' : '' }}>Mediano</option>
-                            <option value="Grande" {{ filtros.tamano == 'Grande' ? 'selected' : '' }}>Grande</option>
-                        </select>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Tamaño</label>
+                                <select class="form-select" name="tamano">
+                                    <option value="">Todos</option>
+                                    <option value="Pequeño" {{ filtros.tamano == 'Pequeño' ? 'selected' : '' }}>Pequeño</option>
+                                    <option value="Mediano" {{ filtros.tamano == 'Mediano' ? 'selected' : '' }}>Mediano</option>
+                                    <option value="Grande" {{ filtros.tamano == 'Grande' ? 'selected' : '' }}>Grande</option>
+                                </select>
+                            </div>
 
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn text-white" style="background-color: #0F5D3C;">Aplicar Filtrar</button>
-                        <a href="{{ path('app_admin_solicitudes') }}" class="btn btn-outline-secondary">Limpiar Filtros</a>
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn text-white" style="background-color: #0F5D3C;">Aplicar Filtrar</button>
+                                <a href="{{ path('app_admin_solicitudes') }}" class="btn btn-outline-secondary">Limpiar Filtros</a>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
-            </div>
-        </div>
         </div>
     </div>
 

@@ -71,8 +71,7 @@
                                         {% endif %}
                                     </div>
 
-                                    {# BOTÓN MODIFICAR ESTADO (Abre Modal o Formulario) #}
-                                    {# Aquí usamos un formulario simple inline para cambiar rápido #}
+                                    {# BOTÓN MODIFICAR ESTADO (Abre formulario) #}
                                     <form action="{{ path('app_admin_cambiar_estado', {id: solicitud.id}) }}" method="post" class="d-inline-flex gap-2">
                                         
                                         <select name="estado" class="form-select form-select-sm" style="width: auto;">

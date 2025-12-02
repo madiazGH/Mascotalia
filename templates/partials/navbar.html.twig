@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
         
-        {# --- 1. LOGO (Común para todos) --- #}
+        {# Logo (Para todos) --- #}
         <a class="brand-text" href="{{ path('app_inicio') }}">
             <img class="logo_mascotalia" src="{{ asset('imagenes/logo_mascotalia.png') }}" alt="logo_mascotalia">
             &nbsp;Mascotalia
@@ -12,23 +12,23 @@
 
         <div class="collapse navbar-collapse" id="navbarContent">
             
-            {# --- 2. ENLACES CENTRALES (Cambian según quién eres) --- #}
+            {# Links centrales (Cambian según quien sos) #}
             <ul class="navbar-nav mx-auto">
                 
                 {% if is_granted('ROLE_ADMIN') %}
-                    {# --- MENÚ DE ADMIN --- #}
+                    {# MENÚ DE ADMIN #}
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_admin_mascotas') }}">Gestionar Mascotas</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_admin_solicitudes') }}">Gestionar Solicitudes</a></li>
 
                 {% elseif app.user %}
-                    {# --- MENÚ DE CLIENTE LOGUEADO --- #}
+                    {# MENÚ DE CLIENTE LOGUEADO #}
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_mascotas') }}">Ver Mascotas</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_mis_solicitudes') }}">Mis Solicitudes</a></li>
 
                 {% else %}
-                    {# --- MENÚ DE VISITANTE (DESLOGUEADO) --- #}
+                    {# MENÚ DE VISITANTE (DESLOGUEADO) #}
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_inicio') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_mascotas') }}">Ver Mascotas</a></li>
                     <li class="nav-item"><a class="nav-link nav-link-custom" href="{{ path('app_login') }}">Mis Solicitudes</a></li>
@@ -36,11 +36,11 @@
 
             </ul>
 
-            {# --- 3. BOTONES DERECHA (Login/Registro vs Perfil/Salir) --- #}
+            {# Botones derecha (Login/Registro vs Perfil/Salir) #}
             <div class="d-flex gap-2 align-items-center">
 
                 {% if is_granted('ROLE_ADMIN') %}
-                        {# ESTADO: LOGUEADO (Sea Admin o Cliente) #}
+                        {# ESTADO: LOGUEADO (Solamente admin) #}
 
                         {# Botón de cerrar sesión del admin #}
                         <a href="{{ path('app_logout') }}" class="btn btn-outline-danger-custom">Cerrar Sesión</a>
@@ -56,7 +56,7 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ path('app_perfil') }}">Mi Perfil</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            {# El path 'app_logout' lo crearemos luego con security #}
+                            {# El path 'app_logout' lo crearemos después con security de symfony #}
                             <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Cerrar Sesión</a></li>
                         </ul>
                     </div>
