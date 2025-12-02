@@ -6,89 +6,107 @@ use App\Entity\Mascota;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Repository\SolicitudRepository;
+use Exception;
 
 class MascotaManager
 {
     private EntityManagerInterface $entityManager;
     private ParameterBagInterface $params;
+    private SolicitudRepository $solicitudRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $params)
+    public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $params, SolicitudRepository $solicitudRepository)
     {
         $this->entityManager = $entityManager;
         $this->params = $params;
+        $this->solicitudRepository = $solicitudRepository;
     }
 
     /**
-     * Guarda una mascota (Alta o Edición)
+     * Guarda una mascota ya sea para crear o editar 
      */
     public function guardar(Mascota $mascota, ?UploadedFile $foto): void
     {
-        // 1. Si hay foto nueva, procesamos el cambio
+        // si hay foto nueva se realiza el cambio
         if ($foto) {
             
-            // A) Primero borramos la vieja (si existe) para no dejar basura
+            // se borra la vieja (si existe) para no dejar basura
             $fotoVieja = $mascota->getImagen();
             if ($fotoVieja) {
                 $this->borrarArchivoFisico($fotoVieja);
             }
 
-            // B) Subimos la nueva
-            $nuevoNombre = $this->subirFoto($foto);
-            $mascota->setImagen($nuevoNombre);
+            // se sube la nueva
+            $nuevaFoto = $this->subirFoto($foto);
+            $mascota->setImagen($nuevaFoto);
         }
 
-        // 2. Si es nueva, disponible por defecto
+        //  si es nueva, disponible por defecto
         if ($mascota->getId() === null) {
             $mascota->setDisponible(true);
         }
 
-        // 3. Persistir
+        // persistir y guardar cambios
         $this->entityManager->persist($mascota);
         $this->entityManager->flush();
     }
 
+    
     /**
-     * Elimina mascota y su foto
+     * Elimina una mascota y su foto.
      */
     public function eliminar(Mascota $mascota): void
     {
-        // Borramos la foto antes de borrar el registro
+        // cuenta las solicitudes con estado "Pendiente o En Revision"
+        $solicitudesActivas = $this->solicitudRepository->count([
+            'mascota' => $mascota,
+            'estado' => ['Pendiente', 'En Revisión']
+        ]);
+
+        if ($solicitudesActivas > 0) {
+            // se lanza una excepción para detener el proceso
+            throw new Exception('No se puede eliminar la mascota porque tiene solicitudes en proceso.');
+        }
+
+        // se borra la imagen
         $this->borrarArchivoFisico($mascota->getImagen());
 
+        // se borra de la base de datos
         $this->entityManager->remove($mascota);
         $this->entityManager->flush();
     }
 
     /**
-     * Lógica privada para borrar archivos del disco
+     *  metodo para borrar las imagenes
      */
     private function borrarArchivoFisico(?string $nombreArchivo): void
     {
-        // Solo verificamos que el nombre no sea nulo o vacío
+        // verificamos que el nombre no sea nulo o vacío
         if ($nombreArchivo) {
             
             $directorio = $this->params->get('mascotas_directory');
             $rutaCompleta = $directorio . '/' . $nombreArchivo;
 
             if (file_exists($rutaCompleta)) {
-                unlink($rutaCompleta); // Borra el archivo
+                unlink($rutaCompleta); // si existe lo borra
             }
         }
     }
 
     /**
-     * Lógica privada para subir archivos
+     * metodo para subir imagen
      */
     private function subirFoto(UploadedFile $file): string
     {
         $newFilename = uniqid() . '.' . $file->guessExtension();
 
+        // mueve el archivo y le asigna el nuevo nombre unico
         try {
             $file->move(
                 $this->params->get('mascotas_directory'),
                 $newFilename
             );
-        } catch (\Exception $e) {
+        } catch (\Exception $e) { 
             throw new \Exception('Error al subir la imagen');
         }
 

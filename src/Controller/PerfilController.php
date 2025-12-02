@@ -13,31 +13,30 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class PerfilController extends AbstractController
 {
+    // Ver formulario con datos del usuario 
     #[Route('/mi-perfil', name: 'app_perfil')]
-    public function index(Request $request, UsuarioManager $usuarioManager): Response
+    public function verPerfil(Request $request, UsuarioManager $usuarioManager): Response
     {
         /** @var Usuario $user */
         $user = $this->getUser();
 
+        // Si se clickea el boton "Guardar Cambios"
         if ($request->isMethod('POST')) {
             
-            // Recolecto todos los datos del formulario
+            // Recupero datos del usuario
             $datos = $request->request->all();
 
             try {
-                // Le paso al Manager:
-                // 1. EL USUARIO que quiero editar ($user)
-                // 2. LOS DATOS nuevos ($datos)
+                // se actualizan los datos del usuario con los datos recuperados
                 $usuarioManager->actualizar($user, $datos);
 
                 $this->addFlash('success', '¡Tus datos se actualizaron correctamente!');
 
             } catch (\Exception $e) {
-                // Si falla cualquier validación (regex o password), muestro el error
+                // si falla cualquier validación, se muestra el mensaje de error
                 $this->addFlash('error', $e->getMessage());
             }
 
-            // Siempre redirijo al mismo lugar para refrescar
             return $this->redirectToRoute('app_perfil');
         }
 

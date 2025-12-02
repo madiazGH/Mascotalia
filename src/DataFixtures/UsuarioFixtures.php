@@ -18,7 +18,7 @@ class UsuarioFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // 1. Creamos dos USUARIO COMÚN (Cliente)
+        // creamos dos clientes
         $usuario1 = new Usuario();
         $usuario1->setEmail('cliente1@mascotalia.com');
         $usuario1->setNombre('Juan');
@@ -31,7 +31,7 @@ class UsuarioFixtures extends Fixture
         $usuario1->setTelefono('342 463-3372');
         $usuario1->setRol(['ROLE_USER']);
         
-        // Encriptar contraseña
+        // encriptar contraseña
         $password = $this->hasher->hashPassword($usuario1, 'Cliente123');
         $usuario1->setContraseña($password);
         
@@ -49,13 +49,13 @@ class UsuarioFixtures extends Fixture
         $usuario2->setTelefono('342 517-4345');
         $usuario2->setRol(['ROLE_USER']);
         
-        // Encriptar contraseña
+        // encriptar contraseña
         $password = $this->hasher->hashPassword($usuario2, 'Cliente123');
         $usuario2->setContraseña($password);
         
         $manager->persist($usuario2);
 
-        // 2. Creamos dos ADMINISTRADORES
+        // creamos dos admins
         $admin1 = new Usuario();
         $admin1->setEmail('admin1@mascotalia.com');
         $admin1->setNombre('Admin1');

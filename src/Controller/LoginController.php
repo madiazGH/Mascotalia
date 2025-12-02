@@ -9,11 +9,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    // Mantenemos la ruta estándar '/login' y el nombre 'app_login'
     #[Route('/login', name: 'app_login')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
-        // Obtener el error de login si lo hubo (ej: contraseña incorrecta)
+        // Obtener el error de login si lo hubo
         $error = $authenticationUtils->getLastAuthenticationError();
         
         // Obtener el último email que ingresó el usuario
@@ -29,7 +28,6 @@ class LoginController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {
-        // Este método nunca se ejecuta, Symfony lo intercepta antes.
-        throw new \LogicException('Este método será interceptado por la firewall de seguridad.');
+            throw new \Exception('Activate logout in security.yaml');
     }
 }

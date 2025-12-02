@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Mascota;
-use App\Manager\MascotaManager; // <--- Importamos nuestro Manager
+use App\Manager\MascotaManager; 
 use App\Repository\MascotaRepository;
 use App\Repository\SolicitudRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
-    // 1. GESTIONAR (LISTADO)
+    // Lista de mascotas (admin)
     #[Route('/mascotas', name: 'app_admin_mascotas')]
     public function gestionarMascotas(MascotaRepository $mascotaRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -29,7 +29,7 @@ class AdminController extends AbstractController
 
         $query = $mascotaRepository->buscarParaAdmin($especie, $tamano, $edad, $estado, $orden);
 
-        $mascotas = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+        $mascotas = $paginator->paginate($query, $request->query->getInt('page', 1), 10); //Pagina los resultados 
 
         return $this->render('admin/mascotas.html.twig', [
             'mascotas' => $mascotas,
@@ -37,7 +37,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    // 2. AGREGAR MASCOTA (Usando Manager)
+    // Agregar Mascota 
     #[Route('/mascotas/agregar', name: 'app_admin_mascota_agregar')]
     public function agregar(Request $request, MascotaManager $mascotaManager): Response
     {
@@ -51,11 +51,11 @@ class AdminController extends AbstractController
             $mascota->setTamano($request->request->get('tamano'));
             $mascota->setDescripcion($request->request->get('descripcion'));
 
-            // Obtenemos el archivo
+            // Obtenemos el archivo de la imagen
             $archivo = $request->files->get('imagen');
 
             try {
-                // El Manager se encarga de la foto y de guardar
+                // El managaer guarda la mascota y el archivo de la imagen
                 $mascotaManager->guardar($mascota, $archivo);
                 $this->addFlash('success', 'Mascota agregada correctamente.');
             } catch (\Exception $e) {
@@ -67,7 +67,7 @@ class AdminController extends AbstractController
         return $this->render('admin/agregar_mascota.html.twig');
     }
 
-    // 3. EDITAR MASCOTA (Usando Manager)
+    // Editar Mascota
     #[Route('/mascotas/editar/{id}', name: 'app_admin_mascota_editar')]
     public function editar(Mascota $mascota, Request $request, MascotaManager $mascotaManager): Response
     {
@@ -83,10 +83,11 @@ class AdminController extends AbstractController
             $disponible = $request->request->get('disponible') === 'on'; 
             $mascota->setDisponible($disponible);
 
-            // Archivo (puede ser null si no suben nada, el Manager lo sabe manejar)
+            // Archivo (puede ser null si no se sube nada)
             $archivo = $request->files->get('imagen');
 
             try {
+                //Se guarda y actualiza la mascota
                 $mascotaManager->guardar($mascota, $archivo);
                 $this->addFlash('success', 'Mascota actualizada correctamente.');
             } catch (\Exception $e) {
@@ -101,25 +102,20 @@ class AdminController extends AbstractController
         ]);
     }
 
-    // 4. ELIMINAR (Usando Manager, aunque aquí es sencillo)
     #[Route('/mascotas/eliminar/{id}', name: 'app_admin_mascota_eliminar')]
-    public function eliminar(Mascota $mascota, SolicitudRepository $solicitudRepository, MascotaManager $mascotaManager): Response
+    public function eliminar(Mascota $mascota, MascotaManager $mascotaManager): Response
     {
-        // RN3: Verificar solicitudes activas (Esto es lógica de consulta, se queda aquí o podría ir al Manager)
-        $solicitudesActivas = $solicitudRepository->count([
-            'mascota' => $mascota,
-            'estado' => ['Pendiente', 'En Revisión']
-        ]);
+        try {
+            // Delegamos todo al Manager
+            $mascotaManager->eliminar($mascota);
+            
+            // Si no explotó, éxito
+            $this->addFlash('success', 'Mascota eliminada correctamente.');
 
-        if ($solicitudesActivas > 0) {
-            $this->addFlash('error', 'No se puede eliminar la mascota porque tiene solicitudes en proceso.');
-            return $this->redirectToRoute('app_admin_mascotas');
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
         }
 
-        // Usamos el manager para borrar
-        $mascotaManager->eliminar($mascota);
-
-        $this->addFlash('success', 'Mascota eliminada correctamente.');
         return $this->redirectToRoute('app_admin_mascotas');
     }
 }

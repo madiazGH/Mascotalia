@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Mascota;
 use App\Entity\Solicitud;
-use App\Manager\SolicitudManager; // <--- Importamos el Manager
+use App\Manager\SolicitudManager; 
 use App\Repository\MascotaRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,11 +17,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin/solicitudes')]
 class AdminSolicitudController extends AbstractController
 {
-    // Las funciones de lectura (index y ver) las dejamos con Repository directo (Está bien así)
+    //Ver mascotas que tienen solicitudes 
     #[Route('/', name: 'app_admin_solicitudes')]
-    public function index(MascotaRepository $mascotaRepo, Request $request, PaginatorInterface $paginator): Response
+    public function verMascotasSolicitadas(MascotaRepository $mascotaRepo, Request $request, PaginatorInterface $paginator): Response
     {
-        // ... (código igual al que tenías de filtros y paginación) ...
         $especie = $request->query->get('especie');
         $tamano = $request->query->get('tamano');
         $orden = $request->query->get('orden');
@@ -35,10 +34,11 @@ class AdminSolicitudController extends AbstractController
         ]);
     }
 
+    //Ver solicitudes de mascotas
     #[Route('/ver/{id}', name: 'app_admin_ver_solicitudes')]
     public function verSolicitudes(Mascota $mascota, PaginatorInterface $paginator, Request $request): Response
     {
-        // ... (código igual al que tenías) ...
+
         $solicitudes = $paginator->paginate(
             $mascota->getSolicitudes(),
             $request->query->getInt('page', 1),
@@ -51,14 +51,13 @@ class AdminSolicitudController extends AbstractController
         ]);
     }
 
-    // --- AQUÍ ESTÁ EL CAMBIO ---
+    //Cambiar estado solicitudes 
     #[Route('/cambiar-estado/{id}', name: 'app_admin_cambiar_estado', methods: ['POST'])]
     public function cambiarEstado(Solicitud $solicitud, Request $request, SolicitudManager $solicitudManager): Response
     {
         $nuevoEstado = $request->request->get('estado');
         
         try {
-            // Delegamos la lógica compleja al Manager
             $solicitudManager->administrarEstado($solicitud, $nuevoEstado);
             $this->addFlash('success', 'Estado actualizado correctamente.');
         } catch (\Exception $e) {

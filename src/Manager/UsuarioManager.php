@@ -26,30 +26,30 @@ class UsuarioManager
     }
 
     /**
-     * REGISTRO (Usa todas las validaciones)
+     * Registro 
      */
     public function registrar(array $datos): void
     {
-        // 1. Validar vacíos (Solo necesario en registro, en perfil ya vienen llenos)
+        // se validan campos vacvios
         $this->validarCamposObligatorios($datos);
 
-        // 2. Validar formatos (Nombre, Apellido, Ubicación, Teléfono)
+        // se validan formatos
         $this->validarFormatos($datos);
 
-        // 3. Validar password (Obligatorio en registro)
+        // se valida contraseña
         $this->validarPassword($datos['password'], $datos['password_repeat']);
 
-        // 4. Validar duplicados
+        // 4se valida que el mail no este registrado ya
         if ($this->usuarioRepository->findOneBy(['email' => $datos['email']])) {
             throw new Exception('El correo electrónico ya está registrado.');
         }
 
-        // --- CREACIÓN ---
+        // crea la entidad 
         $usuario = new Usuario();
         $usuario->setEmail($datos['email']);
         $usuario->setDni($datos['dni']);
         
-        // Seteo datos comunes (reutilizamos lógica si quisieramos, pero aquí es seteo directo)
+        // setea los datos comunes (datos que se reutilizan en mi perfil)
         $this->setearDatosBasicos($usuario, $datos);
 
         try {
@@ -60,27 +60,28 @@ class UsuarioManager
             throw new Exception('El formato de la fecha de nacimiento es inválido.');
         }
 
-        // Encriptar y guardar
+        // encriptar y guardar
         $hashed = $this->passwordHasher->hashPassword($usuario, $datos['password']);
         $usuario->setContraseña($hashed);
         $usuario->setRol(['ROLE_USER']);
 
+        // impactar en base de datos 
         $this->entityManager->persist($usuario);
         $this->entityManager->flush();
     }
 
     /**
-     * ACTUALIZACIÓN (Reutiliza las validaciones de formato)
+     * Actualizar usuario
      */
     public function actualizar(Usuario $usuario, array $datos): void
     {
-        // 1. Validar formatos (Reutilizamos el mismo método privado)
+        // valida formatos
         $this->validarFormatos($datos);
 
-        // 2. Actualizar datos básicos
+        // actualiza datos basicos
         $this->setearDatosBasicos($usuario, $datos);
 
-        // 3. Password (Solo si enviaron algo, reutilizamos validación)
+        // actualiza la contraseña si es que se ingreso
         if (!empty($datos['password'])) {
             $this->validarPassword($datos['password'], $datos['password_repeat']);
             
@@ -91,10 +92,9 @@ class UsuarioManager
         $this->entityManager->flush();
     }
 
-    // =========================================================================
-    // MÉTODOS PRIVADOS (Aquí está la lógica compartida)
-    // =========================================================================
+    
 
+    //Valida que los campos no esten vacios 
     private function validarCamposObligatorios(array $datos): void
     {
         if (empty($datos['nombre']) || empty($datos['apellido']) || empty($datos['dni']) || 
@@ -104,6 +104,7 @@ class UsuarioManager
         }
     }
 
+    //Valida los formatos 
     private function validarFormatos(array $datos): void
     {
         $soloLetras = "/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/";
@@ -118,25 +119,27 @@ class UsuarioManager
             throw new Exception('La Provincia y Ciudad solo pueden contener letras.');
         }
 
-        // Teléfono
+        // Telefono
         if (!ctype_digit($datos['telefono'])) {
             throw new Exception('El teléfono solo debe contener números.');
         }
     }
 
+    // valida contraseña
     private function validarPassword(string $password, string $repetir): void
     {
-        // Complejidad
+        // complejidad
         if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
             throw new Exception('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
         }
 
-        // Coincidencia
+        // coincidencia
         if ($password !== $repetir) {
             throw new Exception('Las contraseñas no coinciden.');
         }
     }
 
+    //setea los campos que se comparten en el registro y en el perfil
     private function setearDatosBasicos(Usuario $usuario, array $datos): void
     {
         $usuario->setNombre($datos['nombre']);

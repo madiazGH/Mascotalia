@@ -15,8 +15,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class SolicitudController extends AbstractController
 {
+    // Ver solicitudes del usuario    
     #[Route('/mis-solicitudes', name: 'app_mis_solicitudes')]
-    public function index(SolicitudRepository $solicitudRepository): Response
+    public function verSolicitudes(SolicitudRepository $solicitudRepository): Response
     {
         /** @var Usuario $usuario */
         $usuario = $this->getUser();
@@ -27,24 +28,25 @@ class SolicitudController extends AbstractController
         ]);
     }
 
+    // Solicitar mascota 
     #[Route('/solicitar/{id}', name: 'app_solicitar_adopcion')]
-    public function solicitar(Mascota $mascota, SolicitudManager $solicitudManager): Response
+    public function solicitarMascota(Mascota $mascota, SolicitudManager $solicitudManager): Response
     {
         /** @var Usuario $usuario */
         $usuario = $this->getUser();
 
         try {
-            // El Manager hace TODAS las validaciones (Admin, Límite, Duplicado) y guarda
+            // El manager valida las reglas y crea la solicitud
             $solicitudManager->crearSolicitud($usuario, $mascota);
-            
+            //Si todo sale bien se muestra el mensaje
             $this->addFlash('success', '¡Solicitud enviada con éxito!');
             return $this->redirectToRoute('app_mis_solicitudes');
 
         } catch (\Exception $e) {
-            // Si el Manager se queja, mostramos su mensaje
+            // si hay algun problema se muestra el mensaje
             $this->addFlash('error', $e->getMessage());
             
-            // Si el error fue porque es Admin, lo mandamos a su panel
+            // si el error fue porque es Admin, lo mandamos a su panel (solo se da en algunas situaciones)
             if ($e->getMessage() === 'Los administradores no pueden solicitar adopciones.') {
                 return $this->redirectToRoute('app_admin_mascotas');
             }
@@ -53,20 +55,21 @@ class SolicitudController extends AbstractController
         }
     }
 
+    //Cancelar solicitud de mascota
     #[Route('/solicitud/cancelar/{id}', name: 'app_solicitud_cancelar')]
-        public function cancelar(Solicitud $solicitud, SolicitudManager $solicitudManager): Response
+        public function cancelarSolicitud(Solicitud $solicitud, SolicitudManager $solicitudManager): Response
         {
             /** @var Usuario $usuario */
             $usuario = $this->getUser();
 
             try {
-                // Delegamos la lógica al Manager
+                // el manager valida y cancela la solicitud
                 $solicitudManager->cancelarSolicitud($usuario, $solicitud);
-                
+                // si sale todo bien muestra el mensaje
                 $this->addFlash('success', 'La solicitud ha sido cancelada correctamente.');
 
             } catch (\Exception $e) {
-                // Si falla (porque no es suya o no está pendiente), mostramos el error
+                // si hay algun error muestra el mensaje
                 $this->addFlash('error', $e->getMessage());
             }
 

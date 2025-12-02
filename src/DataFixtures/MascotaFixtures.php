@@ -11,8 +11,6 @@ class MascotaFixtures extends Fixture
     {
         $edades = ['Cachorro', 'Joven', 'Adulto', 'Abuelo'];
         $tamanos = ['Pequeño', 'Mediano', 'Grande'];
-        $imagenesPruebaPerro = ['perro1.jpg', 'perro2.jpg', 'perro3.jpg', 'perro4.jpg', 'perro5.jpg', 'perro6.jpg'];
-        $imagenesPruebaGato = ['gato1.jpg', 'gato2.jpg', 'gato3.jpg', 'gato4.jpg'];
 
         // Fixture para 6 perros
         for ($i = 1; $i < 7; $i++) {
@@ -24,7 +22,7 @@ class MascotaFixtures extends Fixture
             $mascotaPerro->setEdad($edades[array_rand($edades)]); 
             $mascotaPerro->setTamano($tamanos[array_rand($tamanos)]);
             
-            // ... resto del código (imagen, descripcion, etc) ...
+            
             $mascotaPerro->setDescripcion('Descripción de prueba...');
             $mascotaPerro->setImagen('perro'.$i.'.jpg');            
             $mascotaPerro->setDisponible(true);
@@ -41,7 +39,6 @@ class MascotaFixtures extends Fixture
             $mascotaGato->setEdad($edades[array_rand($edades)]); 
             $mascotaGato->setTamano($tamanos[array_rand($tamanos)]);
             
-            // ... resto del código (imagen, descripcion, etc) ...
             $mascotaGato->setDescripcion('Descripción de prueba...');
             $mascotaGato->setImagen('gato'.$i.'.jpg');            
             $mascotaGato->setDisponible(true);

@@ -21,107 +21,109 @@ class SolicitudManager
     }
 
     /**
-     * Intenta crear una solicitud. Lanza Exception si viola alguna regla.
+     * Crea una solicitud
      */
     public function crearSolicitud(Usuario $usuario, Mascota $mascota): void
     {
-        // 1. VALIDACIÓN: Bloquear Admin
+        // si el usuario es admin no le permite crear una solicitud
         if (in_array('ROLE_ADMIN', $usuario->getRoles())) {
             throw new Exception('Los administradores no pueden solicitar adopciones.');
         }
 
-        // 2. VALIDACIÓN RN3: Límite de pendientes
+        // cuenta las solicitudes con estado "Pendiente o En Revision"
         $cantidadActivas = $this->solicitudRepository->count([
             'usuario' => $usuario,
             'estado' => ['Pendiente', 'En Revisión']
         ]);
 
+        //si son mas de 3 te envia el mensaje 
         if ($cantidadActivas >= 3) {
             throw new Exception('Ya tienes 3 solicitudes en proceso (Pendientes o En Revisión).');
         }
 
-        // 3. VALIDACIÓN RN2: Duplicados
+        // busca una solicitud con el usuario y la mascota
         $existe = $this->solicitudRepository->findOneBy([
             'usuario' => $usuario,
             'mascota' => $mascota,
         ]);
 
+        // si existe envia el mensaje de que ya existe la solicitud 
         if ($existe) {
             throw new Exception('Ya enviaste una solicitud para esta mascota.');
         }
 
-        // 4. CREACIÓN
+        // se crea la solicitud
         $solicitud = new Solicitud();
         $solicitud->setUsuario($usuario);
         $solicitud->setMascota($mascota);
         $solicitud->setFechaEnvio(new \DateTime());
         $solicitud->setEstado('Pendiente');
 
+        // se impacta en la base 
         $this->entityManager->persist($solicitud);
         $this->entityManager->flush();
     }
     
     /**
-     * Cancela (elimina) una solicitud validando reglas de negocio.
+     *  Cancela la solicitud
      */
     public function cancelarSolicitud(Usuario $usuario, Solicitud $solicitud): void
     {
-        // 1. SEGURIDAD: Verificar que la solicitud pertenezca al usuario que intenta borrarla
+        // verificar que la solicitud pertenezca al usuario que intenta borrarla
         if ($solicitud->getUsuario() !== $usuario) {
             throw new Exception('No puedes cancelar una solicitud que no es tuya.');
         }
 
-        // 2. REGLA DE NEGOCIO: Solo se puede cancelar si está "Pendiente"
+        // solo se puede cancelar si está "Pendiente"
         if ($solicitud->getEstado() !== 'Pendiente') {
             throw new Exception('No se puede cancelar la solicitud porque ya está en proceso de revisión o fue resuelta.');
         }
 
-        // 3. ELIMINACIÓN
+        // se elimina de la base de datos
         $this->entityManager->remove($solicitud);
         $this->entityManager->flush();
     }
 
     /**
-     * Gestiona el cambio de estado realizado por el administrador.
-     * Aplica la regla RN3: Si se acepta una, se rechazan las competidoras.
+     *  Gestiona el cambio de estado realizado por el administrador.
      */
     public function administrarEstado(Solicitud $solicitud, string $nuevoEstado): void
     {
-        // 1. Validaciones básicas
+        // validacion basica 
         if (!in_array($nuevoEstado, ['Pendiente', 'En Revisión', 'Aceptada', 'Rechazada'])) {
             throw new Exception('Estado no válido.');
         }
 
-        // 2. Lógica RN3: Resolución Única
+        // si el nuevo estado es "Aceptada"
         if ($nuevoEstado === 'Aceptada') {
             
-            // Aceptar la actual
+            // se acepta
             $solicitud->setEstado('Aceptada');
             
-            // Buscar y rechazar a la competencia
+            // buscan las otras solicitudes de la mascota
             $otrasSolicitudes = $solicitud->getMascota()->getSolicitudes();
             
             foreach ($otrasSolicitudes as $otra) {
-                // Si no es la misma y no estaba ya rechazada
+                //todas las solicitudes que no sean la aceptada se rechazan si es que ya lo estan
                 if ($otra->getId() !== $solicitud->getId() && $otra->getEstado() !== 'Rechazada') {
                     $otra->setEstado('Rechazada');
                 }
             }
 
-            // Marcar mascota como NO disponible (Ya tiene dueño)
+            // la mascota se pone como no disponible 
             $solicitud->getMascota()->setDisponible(false);
 
         } else {
-            // Caso: En Revisión, Rechazada o vuelta a Pendiente
+            // En Revisión, Rechazada o vuelta a Pendiente
             $solicitud->setEstado($nuevoEstado);
             
-            // Si se rechaza, aseguramos que la mascota vuelva a estar disponible (por si acaso)
+            // Si se rechaza, aseguramos que la mascota vuelva a estar disponible 
             if ($nuevoEstado === 'Rechazada') {
                 $solicitud->getMascota()->setDisponible(true);
             }
         }
 
-        // 3. Guardar todo
+        // Guardar todo
         $this->entityManager->flush();
     }
 }
